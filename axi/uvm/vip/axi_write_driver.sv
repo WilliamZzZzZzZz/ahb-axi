@@ -15,8 +15,7 @@ class axi_write_driver extends uvm_object;
         aw2b_mbx = new();
     endfunction
 
-    task run_phase(uvm_phase phase);
-        super.run_phase(phase);
+    virtual task run_write_channel();
         @(vif.arst === 1'b0);
         fork
             //start three threads
@@ -27,7 +26,7 @@ class axi_write_driver extends uvm_object;
     endtask
 
     //write address channel
-    task drive_aw_channel();
+    virtual task drive_aw_channel();
         axi_transaction tr;
         forever begin
             req_mbx.get(tr);    //get response from B channel
@@ -56,7 +55,7 @@ class axi_write_driver extends uvm_object;
     endtask
 
     //write data channel
-    task drive_w_channel();
+    virtual task drive_w_channel();
         axi_transaction tr;
         forever begin
             aw2w_mbx.get(tr);
@@ -82,7 +81,7 @@ class axi_write_driver extends uvm_object;
     endtask
 
     //write response channel
-    task drive_b_channel();
+    virtual task drive_b_channel();
         axi_transaction tr;
         forever begin
             aw2b_mbx.get(tr);

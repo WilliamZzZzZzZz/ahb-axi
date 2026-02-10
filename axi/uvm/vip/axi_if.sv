@@ -77,16 +77,21 @@ interface axi_if #(
         default input #1ns output #1ns;
         
         // Write channels - Master drives
+        //write address channel
         output awid, awaddr, awlen, awsize, awburst, awlock, awcache, awprot, awvalid;
         input  awready;
+        //write data channel
         output wdata, wstrb, wlast, wvalid;
         input  wready;
+        //write response channel
         input  bid, bresp, bvalid;
         output bready;
         
         // Read channels - Master drives
+        //read address channel
         output arid, araddr, arlen, arsize, arburst, arlock, arcache, arprot, arvalid;
         input  arready;
+        //read data channel
         input  rid, rdata, rresp, rlast, rvalid;
         output rready;
     endclocking

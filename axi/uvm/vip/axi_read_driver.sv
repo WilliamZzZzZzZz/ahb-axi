@@ -13,8 +13,7 @@ class axi_read_driver extends uvm_object;
         ar2r_mbx = new();
     endfunction
 
-    task run_phase(uvm_phase phase);
-        super.run_phase(phase);
+    virtual task run_read_channel();
         @(vif.arst === 1'b0);
         fork
             //two read channel threads
@@ -23,7 +22,8 @@ class axi_read_driver extends uvm_object;
         join_none
     endtask
 
-    task drive_ar_channel();
+    //read address channel
+    virtual task drive_ar_channel();
         axi_transaction tr;
         forever begin
             req_mbx.get(tr);
@@ -44,12 +44,13 @@ class axi_read_driver extends uvm_object;
             do begin
                 @(posedge vif.aclk);
             end while(vif.master_cb.arready === 1'b0)
-
+            //finish handshake
             vif.master_cb.arvalid <= 1'b0;
         end
     endtask
 
-    task drive_r_channel();
+    //read data channel
+    virtual task drive_r_channel();
         axi_transaction tr;
         forever begin
             ar2r_mbx.get(tr);
@@ -57,14 +58,12 @@ class axi_read_driver extends uvm_object;
             for(int i = 0; i <= tr.arlen; i++) begin
                 //ready read data from DUT
                 vif.master_cb.rready <= 1'b1;
-
                 //handshake polling
                 do begin
                     @(posedge vif.aclk);
                 end while(vif.master_cb.rvalid === 1'b0)
                 //collect data
                 tr.data[i] = vif.master_cb.rdata;
-
                 //check ID
                 if(vif.master_cb.rid != tr.arid) begin
                     `uvm_error(get_type_name(), $sformatf("Read Channel ID Mismatch! Expt: %0h, Act: %0h", tr.arid, vif.master_cb.rid))
