@@ -1,3 +1,6 @@
+`ifndef AXI_IF_SV
+`define AXI_IF_SV
+
 //------------------------------------------------------------------------------
 // AXI4 Interface
 // Description: AXI4 interface for connecting master and slave devices
@@ -73,7 +76,7 @@ interface axi_if #(
     //--------------------------------------------------------------------------
     
     // Master clocking block - used by master driver
-    clocking master_cb @(posedge clk);
+    clocking master_cb @(posedge aclk);
         default input #1ns output #1ns;
         
         // Write channels - Master drives
@@ -97,7 +100,7 @@ interface axi_if #(
     endclocking
 
     // Slave clocking block - used by slave driver (if needed)
-    clocking slave_cb @(posedge clk);
+    clocking slave_cb @(posedge aclk);
         default input #1ns output #1ns;
         
         // Write channels - Slave drives
@@ -116,13 +119,17 @@ interface axi_if #(
     endclocking
 
     // Monitor clocking block - used by monitor (samples all signals)
-    clocking monitor_cb @(posedge clk);
+    clocking monitor_cb @(posedge aclk);
         default input #1ns output #1ns;
-        
+        //AW channel
         input awid, awaddr, awlen, awsize, awburst, awlock, awcache, awprot, awvalid, awready;
+        //W channel
         input wdata, wstrb, wlast, wvalid, wready;
+        //B channel
         input bid, bresp, bvalid, bready;
+        //AR channel
         input arid, araddr, arlen, arsize, arburst, arlock, arcache, arprot, arvalid, arready;
+        //R channel
         input rid, rdata, rresp, rlast, rvalid, rready;
     endclocking
 
@@ -133,19 +140,19 @@ interface axi_if #(
     // Master modport - for master agent/driver
     modport master (
         clocking master_cb,
-        input clk, rst
+        input aclk, arst
     );
 
     // Slave modport - for slave agent/driver
     modport slave (
         clocking slave_cb,
-        input clk, rst
+        input aclk, arst
     );
 
     // Monitor modport - for monitor
     modport monitor (
         clocking monitor_cb,
-        input clk, rst,
+        input aclk, arst,
         input awid, awaddr, awlen, awsize, awburst, awlock, awcache, awprot, awvalid, awready,
         input wdata, wstrb, wlast, wvalid, wready,
         input bid, bresp, bvalid, bready,
@@ -155,7 +162,7 @@ interface axi_if #(
 
     // Passive monitor modport - for passive monitoring
     modport passive (
-        input clk, rst,
+        input aclk, arst,
         input awid, awaddr, awlen, awsize, awburst, awlock, awcache, awprot, awvalid, awready,
         input wdata, wstrb, wlast, wvalid, wready,
         input bid, bresp, bvalid, bready,
@@ -169,7 +176,7 @@ interface axi_if #(
     
     // Write address channel stability
     property p_awvalid_stable;
-        @(posedge clk) disable iff (rst)
+        @(posedge aclk) disable iff (arst)
         (awvalid && !awready) |=> $stable(awid) && $stable(awaddr) && 
                                    $stable(awlen) && $stable(awsize) && 
                                    $stable(awburst) && $stable(awvalid);
@@ -179,7 +186,7 @@ interface axi_if #(
 
     // Write data channel stability
     property p_wvalid_stable;
-        @(posedge clk) disable iff (rst)
+        @(posedge aclk) disable iff (arst)
         (wvalid && !wready) |=> $stable(wdata) && $stable(wstrb) && 
                                 $stable(wlast) && $stable(wvalid);
     endproperty
@@ -188,7 +195,7 @@ interface axi_if #(
 
     // Read address channel stability
     property p_arvalid_stable;
-        @(posedge clk) disable iff (rst)
+        @(posedge aclk) disable iff (arst)
         (arvalid && !arready) |=> $stable(arid) && $stable(araddr) && 
                                    $stable(arlen) && $stable(arsize) && 
                                    $stable(arburst) && $stable(arvalid);
@@ -198,7 +205,7 @@ interface axi_if #(
 
     // Write response channel stability
     property p_bvalid_stable;
-        @(posedge clk) disable iff (rst)
+        @(posedge aclk) disable iff (arst)
         (bvalid && !bready) |=> $stable(bid) && $stable(bresp) && $stable(bvalid);
     endproperty
     assert property (p_bvalid_stable) else 
@@ -206,7 +213,7 @@ interface axi_if #(
 
     // Read data channel stability
     property p_rvalid_stable;
-        @(posedge clk) disable iff (rst)
+        @(posedge aclk) disable iff (arst)
         (rvalid && !rready) |=> $stable(rid) && $stable(rdata) && 
                                 $stable(rresp) && $stable(rlast) && $stable(rvalid);
     endproperty
@@ -247,7 +254,9 @@ interface axi_if #(
 
     // Wait for specified number of clock cycles
     task automatic wait_clks(int num);
-        repeat(num) @(posedge clk);
+        repeat(num) @(posedge aclk);
     endtask
 
 endinterface : axi_if
+
+`endif 

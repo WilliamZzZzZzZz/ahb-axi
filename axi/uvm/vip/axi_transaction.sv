@@ -1,46 +1,54 @@
+`ifndef AXI_TRANSACTION_SV
+`define AXI_TRANSACTION_SV
+
 class axi_transaction extends uvm_sequence_item;
     
     //--------------------------------------------------------------------------
     // transaction type: WRITE or READ
     //--------------------------------------------------------------------------
-    typedef enum {READ, WRITE} trans_type_e;
-    rand trans_type_e trans_type;
+    rand trans_type_enum trans_type;
+
+    int current_wbeat_count;
+    int current_rbeat_count;
+    int wbeat_finish;
+    int b_finish;
+    int rbeat_finish;
     
     //--------------------------------------------------------------------------
     // Write address channel
     //--------------------------------------------------------------------------
-    rand bit [ID_WIDTH-1:0]     awid;      // write address id
-    rand bit [ADDR_WIDTH-1:0]   awaddr;    // write address
-    rand bit [7:0]              awlen;     // burst length(0-255)
-    rand bit [2:0]              awsize;    // burst size(00-1byte, 01-2bytes, 10-4bytes, 11-8bytes)
-    rand bit [1:0]              awburst;   // burst type(00-FIXED, 01-INCR, 10-WRAP)
-    rand bit                    awlock;    // lock type(0-normal access, 1-exclusive access)
-    rand bit [3:0]              awcache;   // cache type
-    rand bit [2:0]              awprot;    // protection type(bit[0]-privileged, bit[1]-secure, bit[2]-instruction)
+    rand bit [31:0]             awid;      // write address id
+    rand bit [15:0]             awaddr;    // write address
+    rand burst_len_enum         awlen;     // burst length(0-255)
+    rand burst_size_enum        awsize;    // burst size(00-1byte, 01-2bytes, 10-4bytes, 11-8bytes)
+    rand burst_type_enum        awburst;   // burst type(00-FIXED, 01-INCR, 10-WRAP)
+    rand lock_type              awlock;    // lock type(0-normal access, 1-exclusive access)
+    rand cache_type             awcache;   // cache type
+    rand prot_type              awprot;    // protection type(bit[0]-privileged, bit[1]-secure, bit[2]-instruction)
     
     //--------------------------------------------------------------------------
     // Write data channel
     //--------------------------------------------------------------------------
-    rand bit [DATA_WIDTH-1:0]   wdata[];   // write data
-    rand bit [STRB_WIDTH-1:0]   wstrb[];   // write strobes(1 bit wstrb control 8bits wdata) 1-allow write in, 0-masked
+    rand bit [31:0]             wdata[];   // write data
+    rand bit [15:0]             wstrb[];   // write strobes(1 bit wstrb control 8bits wdata) 1-allow write in, 0-masked
     
     //--------------------------------------------------------------------------
     // write response channel
     //--------------------------------------------------------------------------
-    bit [ID_WIDTH-1:0]          bid;       // response id(which data)
+    bit [7:0]                   bid;       // response id(which data)
     bit [1:0]                   bresp;     // write response from slave(00-OKAY, 01-EXOKAY, 10-SLVERR, 11-DECERR)
     
     //--------------------------------------------------------------------------
     // read address channel
     //--------------------------------------------------------------------------
-    rand bit [ID_WIDTH-1:0]     arid;      // read address id
-    rand bit [ADDR_WIDTH-1:0]   araddr;    // read address
-    rand bit [7:0]              arlen;     // burst length(0-255)
-    rand bit [2:0]              arsize;    // burst size
-    rand bit [1:0]              arburst;   // burst type
-    rand bit                    arlock;    // lock type
-    rand bit [3:0]              arcache;   // cache type
-    rand bit [2:0]              arprot;    // protection type
+    rand bit [7:0]              arid;      // read address id
+    rand bit [15:0]             araddr;    // read address
+    rand burst_len_enum         arlen;     // burst length(0-255)
+    rand burst_size_enum        arsize;    // burst size
+    rand burst_type_enum        arburst;   // burst type
+    rand lock_type              arlock;    // lock type
+    rand cache_type             arcache;   // cache type
+    rand prot_type              arprot;    // protection type
     
     //--------------------------------------------------------------------------
     // read data channel
@@ -143,3 +151,5 @@ class axi_transaction extends uvm_sequence_item;
     endfunction
     
 endclass
+
+`endif 

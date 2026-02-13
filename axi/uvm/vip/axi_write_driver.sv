@@ -1,3 +1,6 @@
+`ifndef AXI_WRITE_DRIVER_SV
+`define AXI_WRITE_DRIVER_SV
+
 class axi_write_driver extends uvm_object;
     `uvm_object_utils(axi_write_driver)
 
@@ -62,7 +65,7 @@ class axi_write_driver extends uvm_object;
             for(int i = 0;  i <= tr.awlen; i++) begin
                 @(posedge vif.aclk)
                 vif.master_cb.wvalid <= 1'b1;
-                vif.master_cb.wdata  <= tr.data[i];
+                vif.master_cb.wdata  <= tr.wdata[i];
                 vif.master_cb.wstrb  <= tr.wstrb[i];
 
                 //WLAST only at last beat pull 1, otherwise 0
@@ -107,4 +110,6 @@ class axi_write_driver extends uvm_object;
         end
     endtask
 
-endclass
+endclass 
+
+`endif 

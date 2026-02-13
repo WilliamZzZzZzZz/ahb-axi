@@ -1,3 +1,6 @@
+`ifndef AXI_READ_DRIVER_SV
+`define AXI_READ_DRIVER_SV
+
 class axi_read_driver extends uvm_object;
     `uvm_object_utils(axi_read_driver)
 
@@ -81,3 +84,5 @@ class axi_read_driver extends uvm_object;
     endtask
 
 endclass
+
+`endif 

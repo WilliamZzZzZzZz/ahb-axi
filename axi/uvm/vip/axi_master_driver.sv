@@ -1,3 +1,6 @@
+`ifndef AXI_MASTER_DRIVER_SV
+`define AXI_MASTER_DRIVER_SV
+
 class axi_master_driver extends uvm_driver#(axi_transaction);
     `uvm_component_utils(axi_master_driver)
 
@@ -56,3 +59,5 @@ class axi_master_driver extends uvm_driver#(axi_transaction);
     endtask
 
 endclass
+
+`endif 
