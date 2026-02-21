@@ -66,7 +66,7 @@ class axi_read_driver extends uvm_object;
                     @(posedge vif.aclk);
                 end while(vif.master_cb.rvalid === 1'b0)
                 //collect data
-                tr.data[i] = vif.master_cb.rdata;
+                tr.rdata[i] = vif.master_cb.rdata;
                 //check ID
                 if(vif.master_cb.rid != tr.arid) begin
                     `uvm_error(get_type_name(), $sformatf("Read Channel ID Mismatch! Expt: %0h, Act: %0h", tr.arid, vif.master_cb.rid))
@@ -75,7 +75,7 @@ class axi_read_driver extends uvm_object;
                     `uvm_info(get_type_name(), "ID Check PASS!", UVM_LOW)
                 end
                 //check RLAST
-                if((i == tr.arlen) && (vif.rlast == 1'b1)) begin 
+                if((i == tr.arlen) && (vif.master_cb.rlast == 1'b1)) begin 
                     `uvm_info(get_type_name(), "RLAST Check PASS!", UVM_LOW)
                 end
 

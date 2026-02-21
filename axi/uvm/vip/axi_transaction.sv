@@ -22,9 +22,9 @@ class axi_transaction extends uvm_sequence_item;
     rand burst_len_enum         awlen;     // burst length(0-255)
     rand burst_size_enum        awsize;    // burst size(00-1byte, 01-2bytes, 10-4bytes, 11-8bytes)
     rand burst_type_enum        awburst;   // burst type(00-FIXED, 01-INCR, 10-WRAP)
-    rand lock_type              awlock;    // lock type(0-normal access, 1-exclusive access)
-    rand cache_type             awcache;   // cache type
-    rand prot_type              awprot;    // protection type(bit[0]-privileged, bit[1]-secure, bit[2]-instruction)
+    rand lock_type_enum         awlock;    // lock type(0-normal access, 1-exclusive access)
+    rand cache_type_enum        awcache;   // cache type
+    rand prot_type_enum         awprot;    // protection type(bit[0]-privileged, bit[1]-secure, bit[2]-instruction)
     
     //--------------------------------------------------------------------------
     // Write data channel
@@ -46,9 +46,9 @@ class axi_transaction extends uvm_sequence_item;
     rand burst_len_enum         arlen;     // burst length(0-255)
     rand burst_size_enum        arsize;    // burst size
     rand burst_type_enum        arburst;   // burst type
-    rand lock_type              arlock;    // lock type
-    rand cache_type             arcache;   // cache type
-    rand prot_type              arprot;    // protection type
+    rand lock_type_enum         arlock;    // lock type
+    rand cache_type_enum        arcache;   // cache type
+    rand prot_type_enum         arprot;    // protection type
     
     //--------------------------------------------------------------------------
     // read data channel

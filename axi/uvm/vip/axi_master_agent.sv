@@ -31,8 +31,8 @@ class axi_master_agent extends uvm_agent;
         monitor.vif = vif;
         driver.seq_item_port.connect(sequencer.seq_item_export);
         driver.vif = vif;
-        sequencer.vif = vif;
-        monitor.item_observed_port.connect.(item_collected_port);
+        // sequencer.vif = vif;
+        monitor.item_observed_port.connect(item_collected_port);
     endfunction
 
     task run_phase(uvm_phase phase);

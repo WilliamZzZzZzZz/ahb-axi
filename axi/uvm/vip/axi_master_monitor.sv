@@ -152,10 +152,10 @@ class axi_master_monitor extends uvm_monitor;
                                 read_trans_queue.delete(idx);
                             end
                         end                                                
+                    end else begin
+                        `uvm_error(get_type_name(),$sformatf("R channel: ID = %0h not found", current_id))
                     end
-                    `uvm_error(get_type_name(),$sformatf("R channel: ID = %0h not found", current_id))
-                end
-                else begin
+                end else begin
                     `uvm_error(get_type_name(), "R channel: queue size < 0")
                 end
             end

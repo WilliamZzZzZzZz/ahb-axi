@@ -14,13 +14,13 @@ class axi_master_driver extends uvm_driver#(axi_transaction);
         super.new(name, parent);
     endfunction
 
-    function build_phase(uvm_phase phase);
+    virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        write_drv = axi_write_driver::type_id::create("write_drv", this);
-        read_drv  = axi_read_driver::type_id::create("read_drv", this);
+        write_drv = axi_write_driver::type_id::create("write_drv");
+        read_drv  = axi_read_driver::type_id::create("read_drv");
     endfunction
 
-    function connect_phase(uvm_phase phase);
+    virtual function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         write_drv.cfg = cfg;
         write_drv.vif = vif;
@@ -32,9 +32,13 @@ class axi_master_driver extends uvm_driver#(axi_transaction);
         super.run_phase(phase);
         write_drv.run_write_channel();
         read_drv.run_read_channel();
+        fork
+            forever begin
+                reset_listener();
+            end
+        join_none
         forever begin
             //always monitor reset signals
-            reset_listener();
             seq_item_port.get_next_item(req);
             //WRITE or READ
             if(req.trans_type == WRITE) begin
