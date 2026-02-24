@@ -74,6 +74,7 @@ module axiram_tb;
     );
 
     initial begin
+        uvm_config_db#(virtual axi_if)::set(null, "uvm_test_top", "vif", axi_if_inst);
         run_test();
     end
 endmodule

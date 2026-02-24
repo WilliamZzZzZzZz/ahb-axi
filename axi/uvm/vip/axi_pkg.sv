@@ -5,7 +5,7 @@ package axi_pkg;
     import uvm_pkg::*;
     `include "uvm_macros.svh"
     `include "axi_types.sv"
-    `include "axi_config.sv"
+    `include "axi_configuration.sv"
     `include "axi_transaction.sv"
     `include "axi_write_driver.sv"
     `include "axi_read_driver.sv"
