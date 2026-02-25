@@ -19,7 +19,8 @@ class axi_write_driver extends uvm_object;
     endfunction
 
     virtual task run_write_channel();
-        @(vif.arst === 1'b0);
+        // @(vif.arst === 1'b0);
+        @(negedge vif.arst);
         fork
             //start three threads
             drive_aw_channel();
@@ -74,8 +75,8 @@ class axi_write_driver extends uvm_object;
 
                 //handshake polling
                 do begin
-                    @(posedge vif.aclk)
-                end while(vif.master_cb.wready === 1'b0)
+                    @(posedge vif.aclk);
+                end while(vif.master_cb.wready === 1'b0);
             end
             //transfer finish
             vif.master_cb.wvalid <= 1'b0;
@@ -95,7 +96,7 @@ class axi_write_driver extends uvm_object;
             //handshake polling
             do begin
                 @(posedge vif.aclk);
-            end while(vif.master_cb.bvalid === 1'b0)
+            end while(vif.master_cb.bvalid === 1'b0);
 
             //check id
             if(vif.master_cb.bid != tr.awid) begin

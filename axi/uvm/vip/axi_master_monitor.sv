@@ -37,7 +37,7 @@ class axi_master_monitor extends uvm_monitor;
             if(vif.monitor_cb.awvalid && vif.monitor_cb.awready) begin
                 tr = axi_transaction::type_id::create("tr", this);
                 //handshake success then sample signals
-                tr.trans_type = axi_transaction::WRITE;
+                tr.trans_type = WRITE;
                 tr.awid     = vif.monitor_cb.awid;
                 tr.awaddr   = vif.monitor_cb.awaddr;
                 tr.awlen    = vif.monitor_cb.awlen;
@@ -112,7 +112,7 @@ class axi_master_monitor extends uvm_monitor;
             //AR channel
             if(vif.monitor_cb.arvalid && vif.monitor_cb.arready) begin
                 tr = axi_transaction::type_id::create("tr", this);
-                tr.trans_type = axi_transaction::READ;
+                tr.trans_type = READ;
                 tr.arid     = vif.monitor_cb.arid;
                 tr.araddr   = vif.monitor_cb.araddr;
                 tr.arlen    = vif.monitor_cb.arlen;

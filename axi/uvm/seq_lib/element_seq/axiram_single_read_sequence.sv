@@ -17,7 +17,7 @@ class axiram_single_read_sequence extends axiram_base_sequence;
     `uvm_info(get_type_name(), "entering...", UVM_LOW)
     `uvm_do_on_with(axi_single, p_sequencer.axi_mst_sqr, {
         trans_type  == READ;
-        araddr      == local::addr;
+        addr      == local::addr;
     })
     data = axi_single.data;
     `uvm_info(get_type_name(), "exiting...", UVM_LOW)

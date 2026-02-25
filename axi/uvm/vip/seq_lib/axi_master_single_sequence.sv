@@ -64,7 +64,7 @@ class axi_master_single_sequence extends axi_base_sequence;
         get_response(rsp);
         //id set 0 in smoke test, so no need to check id temporarily
         //check response
-        if(rsp.rresp == OKAY) begin
+        if(rsp.rresp[0] == OKAY) begin
             data =rsp.rdata[0];
             `uvm_info(get_type_name(), $sformatf("read complete: ADDR=%0h DATA=%0h", addr, data), UVM_MEDIUM)
         end else begin

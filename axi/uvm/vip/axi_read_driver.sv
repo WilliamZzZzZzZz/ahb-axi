@@ -17,7 +17,8 @@ class axi_read_driver extends uvm_object;
     endfunction
 
     virtual task run_read_channel();
-        @(vif.arst === 1'b0);
+        // @(vif.arst === 1'b0);
+        @(negedge vif.arst);
         fork
             //two read channel threads
             drive_ar_channel();
@@ -46,7 +47,7 @@ class axi_read_driver extends uvm_object;
             //handshake polling
             do begin
                 @(posedge vif.aclk);
-            end while(vif.master_cb.arready === 1'b0)
+            end while(vif.master_cb.arready === 1'b0);
             //finish handshake
             vif.master_cb.arvalid <= 1'b0;
         end
@@ -64,7 +65,7 @@ class axi_read_driver extends uvm_object;
                 //handshake polling
                 do begin
                     @(posedge vif.aclk);
-                end while(vif.master_cb.rvalid === 1'b0)
+                end while(vif.master_cb.rvalid === 1'b0);
                 //collect data
                 tr.rdata[i] = vif.master_cb.rdata;
                 //check ID

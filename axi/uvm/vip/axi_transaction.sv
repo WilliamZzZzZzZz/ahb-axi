@@ -3,6 +3,7 @@
 
 class axi_transaction extends uvm_sequence_item;
     
+
     //--------------------------------------------------------------------------
     // transaction type: WRITE or READ
     //--------------------------------------------------------------------------
@@ -119,7 +120,7 @@ class axi_transaction extends uvm_sequence_item;
     }
     
     `uvm_object_utils_begin(axi_transaction)
-        `uvm_field_enum(trans_type_e, trans_type, UVM_ALL_ON)
+        `uvm_field_enum(trans_type_enum, trans_type, UVM_ALL_ON)
         `uvm_field_int(awid, UVM_ALL_ON)
         `uvm_field_int(awaddr, UVM_ALL_ON | UVM_HEX)
         `uvm_field_int(awlen, UVM_ALL_ON)

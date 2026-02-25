@@ -57,9 +57,11 @@ class axi_master_driver extends uvm_driver#(axi_transaction);
         @(posedge vif.arst)
         vif.master_cb.awvalid   <= 1'b0;
         vif.master_cb.wvalid    <= 1'b0;
-        vif.master_cb.bvalid    <= 1'b0;
         vif.master_cb.arvalid   <= 1'b0;
-        vif.master_cb.rvalid    <= 1'b0;
+        //signals bvalid and rvalid are driven by slave, master has no access to dirve them
+        //so master only drive 3 signals to 0 while reset come, other 2 signals would be driven by slave(DUT)
+        // vif.master_cb.bvalid    <= 1'b0;
+        // vif.master_cb.rvalid    <= 1'b0;
     endtask
 
 endclass

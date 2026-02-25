@@ -7,7 +7,7 @@ class axiram_base_test extends uvm_test;
     axiram_env env;
 
     function new(string name = "axiram_base_test", uvm_component parent = null);
-        super.new(name, parent)
+        super.new(name, parent);
     endfunction
 
     function void build_phase(uvm_phase phase);
@@ -15,7 +15,7 @@ class axiram_base_test extends uvm_test;
         env = axiram_env::type_id::create("env", this);
     endfunction
 
-    function void connect_phase(uvm_phsae phase);
+    function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
 
     endfunction
