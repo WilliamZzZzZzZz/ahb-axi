@@ -1,5 +1,5 @@
-`ifndef AXIRAM_SEQ_LIB_SV
-`define AXIRAM_SEQ_LIB_SV
+`ifndef AXIRAM_SEQ_LIB_SVH
+`define AXIRAM_SEQ_LIB_SVH
 
 `include "axiram_base_sequence.sv"
 `include "axiram_single_read_sequence.sv"
