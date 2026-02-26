@@ -10,12 +10,14 @@ class axi_write_driver extends uvm_object;
     mailbox #(axi_transaction) req_mbx;
     mailbox #(axi_transaction) aw2w_mbx;
     mailbox #(axi_transaction) aw2b_mbx;
+    mailbox #(axi_transaction) rsp_mbx;  // response back to master_driver
 
     function new(string name = "axi_write_driver");
         super.new(name);
         req_mbx  = new();
         aw2w_mbx = new();
         aw2b_mbx = new();
+        rsp_mbx  = new();
     endfunction
 
     virtual task run_write_channel();
@@ -37,7 +39,7 @@ class axi_write_driver extends uvm_object;
             aw2w_mbx.put(tr);   //copy tr to W and B channel
             aw2b_mbx.put(tr);
             //drive AW signals
-            @(posedge vif.aclk)
+            @(vif.master_cb);
             vif.master_cb.awvalid   <= 1'b1;
             vif.master_cb.awid      <= tr.awid;
             vif.master_cb.awaddr    <= tr.awaddr;
@@ -50,7 +52,7 @@ class axi_write_driver extends uvm_object;
             
             //hanshake polling
             do begin
-                @(posedge vif.aclk);
+                @(vif.master_cb);
             end while(vif.master_cb.awready === 1'b0);
 
             //jump out DO loop means handshake success
@@ -64,7 +66,7 @@ class axi_write_driver extends uvm_object;
         forever begin
             aw2w_mbx.get(tr);
             for(int i = 0;  i <= tr.awlen; i++) begin
-                @(posedge vif.aclk)
+                @(vif.master_cb);
                 vif.master_cb.wvalid <= 1'b1;
                 vif.master_cb.wdata  <= tr.wdata[i];
                 vif.master_cb.wstrb  <= tr.wstrb[i];
@@ -75,7 +77,7 @@ class axi_write_driver extends uvm_object;
 
                 //handshake polling
                 do begin
-                    @(posedge vif.aclk);
+                    @(vif.master_cb);
                 end while(vif.master_cb.wready === 1'b0);
             end
             //transfer finish
@@ -95,7 +97,7 @@ class axi_write_driver extends uvm_object;
 
             //handshake polling
             do begin
-                @(posedge vif.aclk);
+                @(vif.master_cb);
             end while(vif.master_cb.bvalid === 1'b0);
 
             //check id
@@ -106,8 +108,15 @@ class axi_write_driver extends uvm_object;
                 `uvm_info(get_type_name(), "ID Check PASS!", UVM_LOW)
             end
 
+            //store response info
+            tr.bid   = vif.master_cb.bid;
+            tr.bresp = vif.master_cb.bresp;
+
             //get response finish
             vif.master_cb.bready <= 1'b0;
+
+            //send response back
+            rsp_mbx.put(tr);
         end
     endtask
 

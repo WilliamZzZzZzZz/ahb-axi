@@ -29,26 +29,44 @@ class axi_master_driver extends uvm_driver#(axi_transaction);
     endfunction
 
     task run_phase(uvm_phase phase);
+        axi_transaction req_item;
         super.run_phase(phase);
-        write_drv.run_write_channel();
-        read_drv.run_read_channel();
+        // assign vif/cfg to sub-drivers here (run_phase guarantees they are set)
+        write_drv.vif = vif;
+        write_drv.cfg = cfg;
+        read_drv.vif  = vif;
+        read_drv.cfg  = cfg;
+
         fork
+            write_drv.run_write_channel();
+            read_drv.run_read_channel();
             forever begin
                 reset_listener();
             end
+            // collect write responses and send back to sequencer
+            forever begin
+                axi_transaction wr_rsp;
+                write_drv.rsp_mbx.get(wr_rsp);
+                seq_item_port.put_response(wr_rsp);
+            end
+            // collect read responses and send back to sequencer
+            forever begin
+                axi_transaction rd_rsp;
+                read_drv.rsp_mbx.get(rd_rsp);
+                seq_item_port.put_response(rd_rsp);
+            end
         join_none
+
         forever begin
-            //always monitor reset signals
             seq_item_port.get_next_item(req);
             //WRITE or READ
             if(req.trans_type == WRITE) begin
                 write_drv.req_mbx.put(req);
-                seq_item_port.item_done();
             end
             else begin  //READ
                 read_drv.req_mbx.put(req);
-                seq_item_port.item_done();
             end
+            seq_item_port.item_done();
         end
     endtask
 

@@ -60,6 +60,8 @@ class axi_master_single_sequence extends axi_base_sequence;
             arlock      == NORMAL;
             arcache     == NONBUFFER;
             arprot      == NPRI_SEC_DATA;
+            wdata.size() == 0;
+            wstrb.size() == 0;
         })
         get_response(rsp);
         //id set 0 in smoke test, so no need to check id temporarily

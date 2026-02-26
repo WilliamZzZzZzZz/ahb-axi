@@ -9,11 +9,13 @@ class axi_read_driver extends uvm_object;
 
     mailbox #(axi_transaction) req_mbx;
     mailbox #(axi_transaction) ar2r_mbx;
+    mailbox #(axi_transaction) rsp_mbx;  // response back to master_driver
 
     function new(string name = "axi_read_driver");
         super.new(name);
         req_mbx  = new();
         ar2r_mbx = new();
+        rsp_mbx  = new();
     endfunction
 
     virtual task run_read_channel();
@@ -33,7 +35,7 @@ class axi_read_driver extends uvm_object;
             req_mbx.get(tr);
             ar2r_mbx.put(tr);
             //drive AR signals
-            @(posedge vif.aclk);
+            @(vif.master_cb);
             vif.master_cb.arvalid   <= 1'b1;
             vif.master_cb.arid      <= tr.arid;
             vif.master_cb.araddr    <= tr.araddr;
@@ -46,7 +48,7 @@ class axi_read_driver extends uvm_object;
             
             //handshake polling
             do begin
-                @(posedge vif.aclk);
+                @(vif.master_cb);
             end while(vif.master_cb.arready === 1'b0);
             //finish handshake
             vif.master_cb.arvalid <= 1'b0;
@@ -64,7 +66,7 @@ class axi_read_driver extends uvm_object;
                 vif.master_cb.rready <= 1'b1;
                 //handshake polling
                 do begin
-                    @(posedge vif.aclk);
+                    @(vif.master_cb);
                 end while(vif.master_cb.rvalid === 1'b0);
                 //collect data
                 tr.rdata[i] = vif.master_cb.rdata;
@@ -80,7 +82,13 @@ class axi_read_driver extends uvm_object;
                     `uvm_info(get_type_name(), "RLAST Check PASS!", UVM_LOW)
                 end
 
+                //collect rresp
+                tr.rresp[i] = vif.master_cb.rresp;
             end
+            //all beats done, deassert rready
+            vif.master_cb.rready <= 1'b0;
+            //send response back
+            rsp_mbx.put(tr);
         end
     endtask
 

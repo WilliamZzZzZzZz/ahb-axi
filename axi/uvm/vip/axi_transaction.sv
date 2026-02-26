@@ -100,6 +100,9 @@ class axi_transaction extends uvm_sequence_item;
         if(trans_type == WRITE) {
             wdata.size() == awlen + 1;
             wstrb.size() == awlen + 1;
+        } else {
+            wdata.size() == 0;
+            wstrb.size() == 0;
         }
     }
     
