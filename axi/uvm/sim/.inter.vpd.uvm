@@ -1,23 +1,27 @@
-#0 in axiram_tb at ../testbench/axiram_tb.sv:83
-@ 0: [CFGDB/SET] Configuration 'uvm_test_top*.vif' (type virtual interface axi_if#(32,16,18,4)) set by  = (virtual interface axi_if#(32,16,18,4)) '{aclk:'h0, arst:'h1, awid:'hxxxxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxxxxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
+#0 in axiram_tb at ../testbench/axiram_tb.sv:84
+@ 0: [CFGDB/SET] Configuration 'uvm_test_top*.vif' (type virtual interface axi_if#(32,16,8,4)) set by  = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.recording_detail' (type logic signed[4095:0]) read by uvm_test_top = null (failed lookup)
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.recording_detail' (type int) read by uvm_test_top = null (failed lookup)
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'common' (id=187) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'common' (id=188) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/DONE] Phase 'common' (id=187) Completed phase
+@ 0: [PH/TRC/DONE] Phase 'common' (id=188) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/SCHEDULED] Phase 'common.build' (id=190) Scheduled from phase common
+@ 0: [PH/TRC/SCHEDULED] Phase 'common.build' (id=191) Scheduled from phase common
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'common.build' (id=190) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'common.build' (id=191) Starting phase
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env = null (failed lookup)
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.recording_detail' (type int) read by uvm_test_top.env = null (failed lookup)
 #0 in \axiram_env::build_phase  at ../env/axiram_env.sv:20
-@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.vif' (type virtual interface axi_if#(32,16,18,4)) read by uvm_test_top.env = (virtual interface axi_if#(32,16,18,4)) '{aclk:'h0, arst:'h1, awid:'hxxxxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxxxxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.vif' (type virtual interface axi_if#(32,16,8,4)) read by uvm_test_top.env = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
+#0 in \axiram_env::build_phase  at ../env/axiram_env.sv:25
+@ 0: [CFGDB/SET] Configuration 'uvm_test_top.env.*.vif' (type virtual interface axi_if#(32,16,8,4)) set by uvm_test_top.env = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
+#0 in \axiram_env::build_phase  at ../env/axiram_env.sv:26
+@ 0: [CFGDB/SET] Configuration 'uvm_test_top.env.*.cfg' (type class axi_pkg::axi_configuration) set by uvm_test_top.env = (class axi_pkg::axi_configuration) '{use_uvm_seeding:'h1, m_leaf_name:"cfg", m_inst_id:365, m_inst_count:372, __m_uvm_status_container:{ ref to class uvm_status_container}, uvm_global_copy_map:'{}, type_name:"axi_configuration"}
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env.mst_agent = null (failed lookup)
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
@@ -106,6 +110,10 @@
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.virt_sqr.seq_item_export.recording_detail' (type int) read by uvm_test_top.env.virt_sqr.seq_item_export = null (failed lookup)
 #0 in \uvm_port_base#(uvm_pkg::uvm_sqr_if_base#(uvm_pkg::uvm_sequence_item,uvm_pkg::uvm_sequence_item))::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_port_base.svh:244
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.virt_sqr.seq_item_export.check_connection_relationships' (type logic signed[4095:0]) read by uvm_test_top.env.virt_sqr.seq_item_export = null (failed lookup)
+#0 in \axi_master_agent::build_phase  at ../vip/./axi_master_agent.sv:24
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.vif' (type virtual interface axi_if#(32,16,8,4)) read by uvm_test_top.env.mst_agent = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
+#0 in \axi_master_agent::build_phase  at ../vip/./axi_master_agent.sv:27
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.cfg' (type class axi_pkg::axi_configuration) read by uvm_test_top.env.mst_agent = (class axi_pkg::axi_configuration) '{use_uvm_seeding:'h1, m_leaf_name:"cfg", m_inst_id:365, m_inst_count:531, __m_uvm_status_container:{ ref to class uvm_status_container}, uvm_global_copy_map:'{}, type_name:"axi_configuration"}
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.sequencer.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env.mst_agent.sequencer = null (failed lookup)
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
@@ -231,38 +239,38 @@
 #0 in \uvm_sequencer_base::build  at /opt/synopsys/vcs201809/etc/uvm-1.2/seq/uvm_sequencer_base.svh:538
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.virt_sqr.pound_zero_count' (type logic signed[4095:0]) read by uvm_test_top.env.virt_sqr = null (failed lookup)
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH_END] Phase 'common.build' (id=190) ENDING PHASE
+@ 0: [PH_END] Phase 'common.build' (id=191) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/DONE] Phase 'common.build' (id=190) Completed phase
+@ 0: [PH/TRC/DONE] Phase 'common.build' (id=191) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/SCHEDULED] Phase 'common.connect' (id=193) Scheduled from phase common.build
+@ 0: [PH/TRC/SCHEDULED] Phase 'common.connect' (id=194) Scheduled from phase common.build
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'common.connect' (id=193) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'common.connect' (id=194) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH_END] Phase 'common.connect' (id=193) ENDING PHASE
+@ 0: [PH_END] Phase 'common.connect' (id=194) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/DONE] Phase 'common.connect' (id=193) Completed phase
+@ 0: [PH/TRC/DONE] Phase 'common.connect' (id=194) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/SCHEDULED] Phase 'common.end_of_elaboration' (id=196) Scheduled from phase common.connect
+@ 0: [PH/TRC/SCHEDULED] Phase 'common.end_of_elaboration' (id=197) Scheduled from phase common.connect
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'common.end_of_elaboration' (id=196) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'common.end_of_elaboration' (id=197) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH_END] Phase 'common.end_of_elaboration' (id=196) ENDING PHASE
+@ 0: [PH_END] Phase 'common.end_of_elaboration' (id=197) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/DONE] Phase 'common.end_of_elaboration' (id=196) Completed phase
+@ 0: [PH/TRC/DONE] Phase 'common.end_of_elaboration' (id=197) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/SCHEDULED] Phase 'common.start_of_simulation' (id=199) Scheduled from phase common.end_of_elaboration
+@ 0: [PH/TRC/SCHEDULED] Phase 'common.start_of_simulation' (id=200) Scheduled from phase common.end_of_elaboration
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'common.start_of_simulation' (id=199) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'common.start_of_simulation' (id=200) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH_END] Phase 'common.start_of_simulation' (id=199) ENDING PHASE
+@ 0: [PH_END] Phase 'common.start_of_simulation' (id=200) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/DONE] Phase 'common.start_of_simulation' (id=199) Completed phase
+@ 0: [PH/TRC/DONE] Phase 'common.start_of_simulation' (id=200) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/SCHEDULED] Phase 'common.run' (id=202) Scheduled from phase common.start_of_simulation
+@ 0: [PH/TRC/SCHEDULED] Phase 'common.run' (id=203) Scheduled from phase common.start_of_simulation
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/SCHEDULED] Phase 'uvm' (id=222) Scheduled from phase common.start_of_simulation
+@ 0: [PH/TRC/SCHEDULED] Phase 'uvm' (id=223) Scheduled from phase common.start_of_simulation
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'common.run' (id=202) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'common.run' (id=203) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 0: [PH/TRC/STRT] Phase 'uvm' (id=222) Starting phase
+@ 0: [PH/TRC/STRT] Phase 'uvm' (id=223) Starting phase

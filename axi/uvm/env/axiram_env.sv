@@ -20,8 +20,11 @@ class axiram_env extends uvm_env;
         if(!uvm_config_db#(virtual axi_if)::get(this, "", "vif", vif)) begin
             `uvm_fatal(get_type_name(), "Failed to get virtual interface 'vif' from config_db")
         end
-
         cfg = axi_configuration::type_id::create("cfg");
+
+        uvm_config_db#(virtual axi_if)::set(this, "*", "vif", vif);
+        uvm_config_db#(axi_configuration)::set(this, "*", "cfg", cfg);
+        
         mst_agent = axi_master_agent::type_id::create("mst_agent", this);
         mst_agent.cfg = cfg;
         mst_agent.vif = vif;

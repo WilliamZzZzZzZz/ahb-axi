@@ -2,6 +2,7 @@ module axiram_tb;
 
     import uvm_pkg::*;
     `include "uvm_macros.svh"
+    import axi_pkg::*;
     import axiram_pkg::*;       //is still not created,
 
     logic clk;
@@ -21,7 +22,7 @@ module axiram_tb;
     axi_if #(
         .DATA_WIDTH(32),
         .ADDR_WIDTH(16),
-        .ID_WIDTH(18),
+        .ID_WIDTH(8),
         .STRB_WIDTH(4)
     ) axi_if_inst(
         .aclk(clk),
