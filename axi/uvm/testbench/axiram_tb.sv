@@ -3,7 +3,7 @@ module axiram_tb;
     import uvm_pkg::*;
     `include "uvm_macros.svh"
     import axi_pkg::*;
-    import axiram_pkg::*;       //is still not created,
+    import axiram_pkg::*;       
 
     logic clk;
     logic rst;

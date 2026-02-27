@@ -35,7 +35,7 @@ class axi_write_driver extends uvm_object;
     virtual task drive_aw_channel();
         axi_transaction tr;
         forever begin
-            req_mbx.get(tr);    //get response from B channel
+            req_mbx.get(tr);    //get response from master driver
             aw2w_mbx.put(tr);   //copy tr to W and B channel
             aw2b_mbx.put(tr);
             //drive AW signals
