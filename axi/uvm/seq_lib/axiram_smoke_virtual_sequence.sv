@@ -19,11 +19,15 @@ class axiram_smoke_virtual_sequence extends axiram_base_virtual_sequence;
             //data = 0x00 0x11 0x22 0x33 0x44 0x55...
             std::randomize(data) with {data == (i << 4) +i;};
             `uvm_do_with(single_write, {
-                addr == local::addr;
-                data == local::data;
+                addr        == local::addr;
+                data        == local::data;
+                burst_len   == BURST_LEN_SINGLE;
+                burst_type  == INCR;
             })
             `uvm_do_with(single_read, {
                 addr == local::addr;
+                burst_len   == BURST_LEN_SINGLE;
+                burst_type  == INCR;
             })
             wr_val = data;
             rd_val = single_read.data;

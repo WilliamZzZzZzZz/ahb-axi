@@ -7,6 +7,8 @@ class axi_master_single_sequence extends axi_base_sequence;
     rand bit [15:0] addr;
     rand bit [31:0] data;
     rand trans_type_enum trans_type;
+    rand burst_len_enum burst_len;
+    rand burst_type_enum burst_type;
 
     constraint single_trans_type_cstr {
         trans_type inside {READ, WRITE};
@@ -30,9 +32,9 @@ class axi_master_single_sequence extends axi_base_sequence;
             trans_type      == WRITE;
             awid            == 0;                  //smoke test only
             awaddr          == local::addr;
-            awlen           == BURST_LEN_SINGLE;
+            awlen           == local::burst_len;
             awsize          == BURST_SIZE_4BYTES;
-            awburst         == INCR;
+            awburst         == local::burst_type;
             awlock          == NORMAL;
             awcache         == NONBUFFER;
             awprot          == NPRI_SEC_DATA;
@@ -54,9 +56,9 @@ class axi_master_single_sequence extends axi_base_sequence;
             trans_type  == READ;
             arid        == 0;
             araddr      == local::addr;
-            arlen       ==  BURST_LEN_SINGLE;
+            arlen       == local::burst_len;
             arsize      == BURST_SIZE_4BYTES;
-            arburst     == INCR;
+            arburst     == local::burst_type;
             arlock      == NORMAL;
             arcache     == NONBUFFER;
             arprot      == NPRI_SEC_DATA;
