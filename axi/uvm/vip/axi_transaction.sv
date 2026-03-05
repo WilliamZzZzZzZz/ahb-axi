@@ -147,12 +147,23 @@ class axi_transaction extends uvm_sequence_item;
     // post-randomize
     //--------------------------------------------------------------------------
     function void post_randomize();
-        // 为读事务初始化数组
         if(trans_type == READ) begin
             rdata = new[arlen + 1];
             rresp = new[arlen + 1];
         end
     endfunction
+    // function void post_randomize();
+    //     int beat_num;
+    //     if(trans_type == WRITE) begin
+    //         beat_num = int'(awlen) + 1;
+    //         wdata = new[beat_num];
+    //         wstrb = new[beat_num];
+    //     end else begin
+    //         beat_num = int'(arlen) + 1;
+    //         rdata = new[beat_num];
+    //         rresp = new[beat_num];
+    //     end
+    // endfunction
     
 endclass
 

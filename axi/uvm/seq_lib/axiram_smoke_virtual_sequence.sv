@@ -11,6 +11,8 @@ class axiram_smoke_virtual_sequence extends axiram_base_virtual_sequence;
 
     virtual task body();
         bit[31:0] addr, data;
+        burst_len_enum burst_len;
+        burst_type_enum burst_type;
         super.body();
 
         `uvm_info(get_type_name(), "entering...", UVM_LOW)

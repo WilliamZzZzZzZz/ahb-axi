@@ -63,8 +63,11 @@ class axi_write_driver extends uvm_object;
     //write data channel
     virtual task drive_w_channel();
         axi_transaction tr;
+        int beat_num;
         forever begin
             aw2w_mbx.get(tr);
+            beat_num = tr.awlen + 1;
+
             for(int i = 0;  i <= tr.awlen; i++) begin
                 @(vif.master_cb);
                 vif.master_cb.wvalid <= 1'b1;

@@ -58,8 +58,10 @@ class axi_read_driver extends uvm_object;
     //read data channel
     virtual task drive_r_channel();
         axi_transaction tr;
+        int beat_num;
         forever begin
             ar2r_mbx.get(tr);
+            beat_num = tr.arlen + 1;
             
             for(int i = 0; i <= tr.arlen; i++) begin
                 //ready read data from DUT
