@@ -8,7 +8,9 @@ class axiram_single_write_sequence extends axiram_base_sequence;
     rand bit [31:0] addr;
     rand bit [31:0] data;
     rand burst_len_enum burst_len;
-    rand burst_type_enum burst_type;    
+    rand burst_type_enum burst_type;
+
+    bit [31:0] every_beat_data[];   //store every beat's data    
 
     function new(string name = "axiram_single_write_sequence");
         super.new(name);
@@ -17,13 +19,24 @@ class axiram_single_write_sequence extends axiram_base_sequence;
     virtual task body();
         axi_master_single_sequence axi_single;
         `uvm_info(get_type_name(), "entering...", UVM_LOW)
-        `uvm_do_on_with(axi_single, p_sequencer.axi_mst_sqr, {
-            trans_type  == WRITE;
-            addr        == local::addr;
-            data        == local::data;
-            burst_len   == local::burst_len;
-            burst_type  == local::burst_type;
-        })
+
+        axi_single = axi_master_single_sequence::type_id::create("axi_single");
+        axi_single.trans_type       = WRITE;
+        axi_single.addr             = addr;
+        axi_single.data             = data;
+        axi_single.burst_len        = burst_len;
+        axi_single.burst_type       = burst_type; 
+        axi_single.every_beat_data  = every_beat_data;       
+
+        axi_single.start(p_sequencer.axi_mst_sqr);
+
+        // `uvm_do_on_with(axi_single, p_sequencer.axi_mst_sqr, {
+        //     trans_type  == WRITE;
+        //     addr        == local::addr;
+        //     data        == local::data;
+        //     burst_len   == local::burst_len;
+        //     burst_type  == local::burst_type;
+        // })
         `uvm_info(get_type_name(), "exiting...", UVM_LOW)
     endtask
 endclass

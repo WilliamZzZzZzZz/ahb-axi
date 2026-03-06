@@ -8,9 +8,11 @@
 
     //smoke test only
     typedef enum bit[7:0] {
-        BURST_LEN_SINGLE = 8'b00000000,
-        BURST_LEN_DOUBLE = 8'b00000001,
-        BURST_LEN_4BEATS = 8'b00000011
+        BURST_LEN_SINGLE  = 8'b00000000,
+        BURST_LEN_DOUBLE  = 8'b00000001,
+        BURST_LEN_4BEATS  = 8'b00000011,
+        BURST_LEN_8BEATS  = 8'b00000111,
+        BURST_LEN_16BEATS = 8'b00010001
     } burst_len_enum;
 
     typedef enum bit[2:0] {

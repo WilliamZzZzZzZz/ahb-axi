@@ -10,6 +10,8 @@ class axi_master_single_sequence extends axi_base_sequence;
     rand burst_len_enum burst_len;
     rand burst_type_enum burst_type;
 
+    bit [31:0] every_beat_data[];   //store every beat's data
+
     constraint single_trans_type_cstr {
         trans_type inside {READ, WRITE};
     }
@@ -28,7 +30,20 @@ class axi_master_single_sequence extends axi_base_sequence;
     endtask
 
     virtual task do_write();
-        `uvm_do_with(req, {
+        int actual_beats = burst_len + 1;
+
+        if(every_beat_data.size() != actual_beats) begin
+            every_beat_data = new[actual_beats];
+            every_beat_data[0] = data;
+            for(int i = 1; i < actual_beats; i ++) begin
+                every_beat_data[i] = 0;
+            end
+        end
+
+        req = axi_transaction::type_id::create("req");
+        start_item(req);
+
+        if(!req.randomize() with {
             trans_type      == WRITE;
             awid            == 0;                  //smoke test only
             awaddr          == local::addr;
@@ -38,10 +53,20 @@ class axi_master_single_sequence extends axi_base_sequence;
             awlock          == NORMAL;
             awcache         == NONBUFFER;
             awprot          == NPRI_SEC_DATA;
-            wdata.size()    == local::burst_len + 1;
-            wdata[0]        == local::data;
-        })
+            wdata.size()    == local::actual_beats;
+            wdata.size()    == local::actual_beats;            
+        }) begin
+            `uvm_fatal(get_type_name(), "randomize failed in vip write transaction")
+        end
+
+        foreach(every_beat_data[i]) begin
+            req.wdata[i] = every_beat_data[i];
+            req.wstrb[i] = 4'hF;
+        end
+        
+        finish_item(req);
         get_response(rsp);
+
         //id set 0 in smoke test, so no need to check id temporarily
         //check response
         if(rsp.bresp == OKAY) begin
@@ -52,6 +77,8 @@ class axi_master_single_sequence extends axi_base_sequence;
     endtask
 
     virtual task do_read();
+        int actual_beats = burst_len + 1;
+
         `uvm_do_with(req, {
             trans_type  == READ;
             arid        == 0;
@@ -62,10 +89,16 @@ class axi_master_single_sequence extends axi_base_sequence;
             arlock      == NORMAL;
             arcache     == NONBUFFER;
             arprot      == NPRI_SEC_DATA;
-            // wdata.size() == 0;
-            // wstrb.size() == 0;
         })
         get_response(rsp);
+
+        every_beat_data = new[actual_beats];
+        foreach(every_beat_data[i]) begin
+            every_beat_data[i] = rsp.rdata[i];
+        end
+
+        data = every_beat_data[0];
+
         //id set 0 in smoke test, so no need to check id temporarily
         //check response
         if(rsp.rresp[0] == OKAY) begin

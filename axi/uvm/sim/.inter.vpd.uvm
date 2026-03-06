@@ -425,68 +425,68 @@
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
 @ 0: [PH/TRC/SKIP] Phase 'uvm.uvm_sched.post_shutdown' (id=327) No objections raised, skipping phase
 #0 in \axiram_smoke_test::run_phase  at ../test/axiram_smoke_test.sv:22
-@ 418000: [OBJTN_TRC] common.run Object uvm_test_top dropped 1 objection(s): count=0  total=0
+@ 898000: [OBJTN_TRC] common.run Object uvm_test_top dropped 1 objection(s): count=0  total=0
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:431
-@ 1418000: [OBJTN_TRC] common.run Object uvm_test_top all_dropped 1 objection(s): count=0  total=0
+@ 1898000: [OBJTN_TRC] common.run Object uvm_test_top all_dropped 1 objection(s): count=0  total=0
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_READY_TO_END_CB] Phase 'uvm.uvm_sched.post_shutdown' (id=327) CALLING READY_TO_END CB
+@ 1898000: [PH_READY_TO_END_CB] Phase 'uvm.uvm_sched.post_shutdown' (id=327) CALLING READY_TO_END CB
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_READY_TO_END_CB] Phase 'common.run' (id=203) CALLING READY_TO_END CB
+@ 1898000: [PH_READY_TO_END_CB] Phase 'common.run' (id=203) CALLING READY_TO_END CB
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_END] Phase 'common.run' (id=203) ENDING PHASE
+@ 1898000: [PH_END] Phase 'common.run' (id=203) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_END] Phase 'uvm.uvm_sched.post_shutdown' (id=327) ENDING PHASE
+@ 1898000: [PH_END] Phase 'uvm.uvm_sched.post_shutdown' (id=327) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'common.run' (id=203) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'common.run' (id=203) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'uvm.uvm_sched.post_shutdown' (id=327) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'uvm.uvm_sched.post_shutdown' (id=327) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'common.extract' (id=212) Scheduled from phase common.run
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'common.extract' (id=212) Scheduled from phase common.run
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'uvm.uvm_sched_end' (id=226) Scheduled from phase uvm.uvm_sched.post_shutdown
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'uvm.uvm_sched_end' (id=226) Scheduled from phase uvm.uvm_sched.post_shutdown
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'uvm.uvm_sched_end' (id=226) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'uvm.uvm_sched_end' (id=226) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'uvm.uvm_sched_end' (id=226) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'uvm.uvm_sched_end' (id=226) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'uvm.uvm_end' (id=224) Scheduled from phase uvm.uvm_sched_end
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'uvm.uvm_end' (id=224) Scheduled from phase uvm.uvm_sched_end
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'uvm.uvm_end' (id=224) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'uvm.uvm_end' (id=224) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'uvm.uvm_end' (id=224) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'uvm.uvm_end' (id=224) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'common.extract' (id=212) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'common.extract' (id=212) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_END] Phase 'common.extract' (id=212) ENDING PHASE
+@ 1898000: [PH_END] Phase 'common.extract' (id=212) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'common.extract' (id=212) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'common.extract' (id=212) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'common.check' (id=215) Scheduled from phase common.extract
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'common.check' (id=215) Scheduled from phase common.extract
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'common.check' (id=215) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'common.check' (id=215) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_END] Phase 'common.check' (id=215) ENDING PHASE
+@ 1898000: [PH_END] Phase 'common.check' (id=215) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'common.check' (id=215) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'common.check' (id=215) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'common.report' (id=218) Scheduled from phase common.check
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'common.report' (id=218) Scheduled from phase common.check
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'common.report' (id=218) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'common.report' (id=218) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_END] Phase 'common.report' (id=218) ENDING PHASE
+@ 1898000: [PH_END] Phase 'common.report' (id=218) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'common.report' (id=218) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'common.report' (id=218) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'common.final' (id=221) Scheduled from phase common.report
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'common.final' (id=221) Scheduled from phase common.report
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'common.final' (id=221) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'common.final' (id=221) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH_END] Phase 'common.final' (id=221) ENDING PHASE
+@ 1898000: [PH_END] Phase 'common.final' (id=221) ENDING PHASE
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'common.final' (id=221) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'common.final' (id=221) Completed phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/SCHEDULED] Phase 'common.common_end' (id=189) Scheduled from phase common.final
+@ 1898000: [PH/TRC/SCHEDULED] Phase 'common.common_end' (id=189) Scheduled from phase common.final
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/STRT] Phase 'common.common_end' (id=189) Starting phase
+@ 1898000: [PH/TRC/STRT] Phase 'common.common_end' (id=189) Starting phase
 #0 in \uvm_root::run_test  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_root.svh:513
-@ 1418000: [PH/TRC/DONE] Phase 'common.common_end' (id=189) Completed phase
+@ 1898000: [PH/TRC/DONE] Phase 'common.common_end' (id=189) Completed phase
