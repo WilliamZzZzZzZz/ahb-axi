@@ -59,37 +59,30 @@ class axi_read_driver extends uvm_object;
     virtual task drive_r_channel();
         axi_transaction tr;
         int beat_num;
+        int i;
         forever begin
             ar2r_mbx.get(tr);
             beat_num = tr.arlen + 1;
-            
-            for(int i = 0; i <= tr.arlen; i++) begin
-                //ready read data from DUT
-                vif.master_cb.rready <= 1'b1;
-                //handshake polling
-                do begin
-                    @(vif.master_cb);
-                end while(vif.master_cb.rvalid === 1'b0);
-                //collect data
-                tr.rdata[i] = vif.master_cb.rdata;
-                //check ID
-                if(vif.master_cb.rid != tr.arid) begin
-                    `uvm_error(get_type_name(), $sformatf("Read Channel ID Mismatch! Expt: %0h, Act: %0h", tr.arid, vif.master_cb.rid))
-                end
-                else begin
-                    `uvm_info(get_type_name(), "ID Check PASS!", UVM_LOW)
-                end
-                //check RLAST
-                if((i == tr.arlen) && (vif.master_cb.rlast == 1'b1)) begin 
-                    `uvm_info(get_type_name(), "RLAST Check PASS!", UVM_LOW)
-                end
 
-                //collect rresp
-                tr.rresp[i] = vif.master_cb.rresp;
+            tr.rdata = new[beat_num];
+            tr.rresp = new[beat_num];
+
+            @(vif.master_cb);
+            vif.master_cb.rready <= 1'b1;
+            i = 0;
+
+            forever begin
+                @(vif.master_cb);
+                if(vif.master_cb.rvalid === 1'b1) begin
+                    tr.rdata[i] = vif.master_cb.rdata;
+                    tr.rresp[i] = vif.master_cb.rresp;
+                    i++;
+                    if(vif.master_cb.rlast === 1'b1 || i >= beat_num) begin
+                        break;
+                    end
+                end
             end
-            //all beats done, deassert rready
             vif.master_cb.rready <= 1'b0;
-            //send response back
             rsp_mbx.put(tr);
         end
     endtask

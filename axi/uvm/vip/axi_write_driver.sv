@@ -64,28 +64,34 @@ class axi_write_driver extends uvm_object;
     virtual task drive_w_channel();
         axi_transaction tr;
         int beat_num;
+        int i;
         forever begin
             aw2w_mbx.get(tr);
             beat_num = tr.awlen + 1;
+            i = 0;
 
-            for(int i = 0;  i <= tr.awlen; i++) begin
+            @(vif.master_cb);
+            vif.master_cb.wvalid <= 1'b1;
+            vif.master_cb.wdata  <= tr.wdata[0];
+            vif.master_cb.wstrb  <= tr.wstrb[0];
+            vif.master_cb.wlast  <= (beat_num == 1) ? 1'b1 : 1'b0;
+            i = 1;
+
+            forever begin
                 @(vif.master_cb);
-                vif.master_cb.wvalid <= 1'b1;
-                vif.master_cb.wdata  <= tr.wdata[i];
-                vif.master_cb.wstrb  <= tr.wstrb[i];
-
-                //WLAST only at last beat pull 1, otherwise 0
-                if(i == tr.awlen) vif.master_cb.wlast <= 1'b1;
-                else              vif.master_cb.wlast <= 1'b0;
-
-                //handshake polling
-                do begin
-                    @(vif.master_cb);
-                end while(vif.master_cb.wready === 1'b0);
+                if(vif.master_cb.wready === 1'b1) begin
+                    if(i >= beat_num) begin
+                        vif.master_cb.wvalid <= 1'b0;
+                        vif.master_cb.wlast  <= 1'b0;
+                        break;
+                    end else begin
+                        vif.master_cb.wdata <= tr.wdata[i];
+                        vif.master_cb.wstrb <= tr.wstrb[i];
+                        vif.master_cb.wlast <= (i == beat_num - 1) ? 1'b1 : 1'b0;
+                        i++;
+                    end
+                end
             end
-            //transfer finish
-            vif.master_cb.wvalid <= 1'b0;
-            vif.master_cb.wlast  <= 1'b0;
         end
     endtask
 
