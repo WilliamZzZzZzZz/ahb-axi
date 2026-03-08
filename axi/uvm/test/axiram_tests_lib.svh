@@ -3,5 +3,6 @@
 
 `include "axiram_base_test.sv"
 `include "axiram_smoke_test.sv"
+`include "axiram_fixed_test.sv"
 
 `endif 

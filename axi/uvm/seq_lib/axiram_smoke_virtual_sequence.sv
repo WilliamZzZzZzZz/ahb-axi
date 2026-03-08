@@ -12,8 +12,8 @@ class axiram_smoke_virtual_sequence extends axiram_base_virtual_sequence;
     virtual task body();
         bit [31:0] addr;
         bit [31:0] every_beat_data[]; 
-        burst_len_enum burst_len = BURST_LEN_8BEATS;
-        burst_type_enum burst_type = INCR;
+        burst_len_enum burst_len    = BURST_LEN_8BEATS;
+        burst_type_enum burst_type  = INCR;
         int actual_beats = burst_len + 1;
 
         super.body();
@@ -29,18 +29,18 @@ class axiram_smoke_virtual_sequence extends axiram_base_virtual_sequence;
 
             //write-in
             single_write = axiram_single_write_sequence::type_id::create("single_write");
-            single_write.addr = addr;
-            single_write.data = every_beat_data[0]; //single beat
-            single_write.every_beat_data = every_beat_data; //mutiple beats
-            single_write.burst_len = burst_len;
-            single_write.burst_type = burst_type;
+            single_write.addr               = addr;
+            single_write.data               = every_beat_data[0]; //single beat
+            single_write.every_beat_data    = every_beat_data; //mutiple beats
+            single_write.burst_len          = burst_len;
+            single_write.burst_type         = burst_type;
             single_write.start(p_sequencer);
 
             //read-out
             single_read = axiram_single_read_sequence::type_id::create("single_read");
-            single_read.addr = addr;
-            single_read.burst_len = burst_len;
-            single_read.burst_type = burst_type;
+            single_read.addr        = addr;
+            single_read.burst_len   = burst_len;
+            single_read.burst_type  = burst_type;
             single_read.start(p_sequencer);
 
             //compare
@@ -48,20 +48,6 @@ class axiram_smoke_virtual_sequence extends axiram_base_virtual_sequence;
             rd_val = single_read.every_beat_data;
             compare_data(wr_val, rd_val);
 
-            // `uvm_do_with(single_write, {
-            //     addr        == local::addr;
-            //     data        == local::data;
-            //     burst_len   == BURST_LEN_DOUBLE;
-            //     burst_type  == INCR;
-            // })
-            // `uvm_do_with(single_read, {
-            //     addr == local::addr;
-            //     burst_len   == BURST_LEN_DOUBLE;
-            //     burst_type  == INCR;
-            // })
-            // wr_val = data;
-            // rd_val = single_read.data;
-            // compare_data(wr_val, rd_val);
         end
         `uvm_info(get_type_name(), "entering...", UVM_LOW)
     endtask

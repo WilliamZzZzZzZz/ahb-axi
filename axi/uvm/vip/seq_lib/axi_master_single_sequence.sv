@@ -56,7 +56,7 @@ class axi_master_single_sequence extends axi_base_sequence;
             wdata.size()    == local::actual_beats;
             wdata.size()    == local::actual_beats;            
         }) begin
-            `uvm_fatal(get_type_name(), "randomize failed in vip write transaction")
+            `uvm_fatal(get_type_name(), "randomize failed in vip-write-transaction")
         end
 
         foreach(every_beat_data[i]) begin
@@ -79,7 +79,10 @@ class axi_master_single_sequence extends axi_base_sequence;
     virtual task do_read();
         int actual_beats = burst_len + 1;
 
-        `uvm_do_with(req, {
+        req = axi_transaction::type_id::create("req");
+        start_item(req);
+
+        if(!req.randomize() with {
             trans_type  == READ;
             arid        == 0;
             araddr      == local::addr;
@@ -89,7 +92,11 @@ class axi_master_single_sequence extends axi_base_sequence;
             arlock      == NORMAL;
             arcache     == NONBUFFER;
             arprot      == NPRI_SEC_DATA;
-        })
+        }) begin
+            `uvm_fatal(get_type_name(), "randomize failed in vip-write-transaction")
+        end
+
+        finish_item(req);
         get_response(rsp);
 
         every_beat_data = new[actual_beats];
