@@ -7,6 +7,7 @@ class axiram_env extends uvm_env;
     axi_configuration           cfg;
     axi_master_agent            mst_agent;
     axiram_virtual_sequencer    virt_sqr;
+    axiram_scoreboard           scb;
 
     virtual axi_if vif;
 
@@ -29,12 +30,14 @@ class axiram_env extends uvm_env;
         mst_agent.cfg = cfg;
         mst_agent.vif = vif;
         virt_sqr = axiram_virtual_sequencer::type_id::create("virt_sqr", this);
+        scb = axiram_scoreboard::type_id::create("scb", this);
     endfunction
 
     virtual function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
 
         virt_sqr.axi_mst_sqr = mst_agent.sequencer;
+        mst_agent.item_collected_port.connect(scb.analysis_export);
     endfunction
 
 endclass
