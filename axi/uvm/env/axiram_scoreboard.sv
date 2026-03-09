@@ -54,7 +54,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
             if(tr.rdata[i] !== expected_data) begin
                 error_count++;
                 `uvm_error(get_type_name(), $sformatf("READ data mismatch: beat[%0d] addr=0x%04h exp=0x%08h act=0x%08h",
-                                                        i, addr, expected, tr.rdata[i] ))
+                                                        i, addr, expected_data, tr.rdata[i] ))
             end else begin
                 `uvm_info(get_type_name(), $sformatf("READ match: beat[%0d] addr=0x%04h data=0x%08h",
                 i, addr, tr.rdata[i]), UVM_HIGH)
@@ -65,9 +65,9 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
     //calculate the beat's actual address
     local function bit [15:0] calculate_beat_addr(
         bit [15:0]      base_addr,
-        burst_type_enum burst_type;
-        burst_size_enum burst_size;
-        int             beat_idx;
+        burst_type_enum burst_type,
+        burst_size_enum burst_size,
+        int             beat_idx
     );
         if(burst_type == FIXED)  begin
             return base_addr;
@@ -79,9 +79,9 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
 
     //according to wstrb, merge old_data and new_data
     local function bit [31:0] merge_data_with_strb(
-        bit [31:0] old_data;
-        bit [31:0] new_data;
-        bit [15:0] wstrb;
+        bit [31:0] old_data,
+        bit [31:0] new_data,
+        bit [15:0] wstrb
     );
         bit [31:0] result;
         result = old_data;
@@ -89,7 +89,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         //according to wstrb, merge old_data and new_data
         for(int lane = 0; lane < 4; lane++) begin
             if(wstrb[lane])
-                result[lane*8 +: 8] = new_word[lane*8 +: 8];
+                result[lane*8 +: 8] = new_data[lane*8 +: 8];
         end 
         return result;
     endfunction
@@ -100,7 +100,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         if(error_count == 0) begin
             `uvm_info(get_type_name(), $sformatf("Scoreboard PASS: check_count: %0d, 0 error", check_count), UVM_LOW)
         end else begin
-            `uvm_error(get_type_name(),$formatf("Scoreboard ERROR: check_count: %0d, error_count: %0d", check_count, error_count))
+            `uvm_error(get_type_name(),$sformatf("Scoreboard ERROR: check_count: %0d, error_count: %0d", check_count, error_count))
         end
     endfunction
 endclass
