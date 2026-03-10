@@ -6,7 +6,6 @@
         READ  = 1
     } trans_type_enum;
 
-    //smoke test only
     typedef enum bit[7:0] {
         BURST_LEN_SINGLE  = 8'b00000000,
         BURST_LEN_DOUBLE  = 8'b00000001,
