@@ -16,11 +16,11 @@
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env = null (failed lookup)
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.recording_detail' (type int) read by uvm_test_top.env = null (failed lookup)
-#0 in \axiram_env::build_phase  at ../env/axiram_env.sv:21
+#0 in \axiram_env::build_phase  at ../env/axiram_env.sv:22
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.vif' (type virtual interface axi_if#(32,16,8,4)) read by uvm_test_top.env = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
-#0 in \axiram_env::build_phase  at ../env/axiram_env.sv:26
-@ 0: [CFGDB/SET] Configuration 'uvm_test_top.env.*.vif' (type virtual interface axi_if#(32,16,8,4)) set by uvm_test_top.env = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
 #0 in \axiram_env::build_phase  at ../env/axiram_env.sv:27
+@ 0: [CFGDB/SET] Configuration 'uvm_test_top.env.*.vif' (type virtual interface axi_if#(32,16,8,4)) set by uvm_test_top.env = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
+#0 in \axiram_env::build_phase  at ../env/axiram_env.sv:28
 @ 0: [CFGDB/SET] Configuration 'uvm_test_top.env.*.cfg' (type class axi_pkg::axi_configuration) set by uvm_test_top.env = (class axi_pkg::axi_configuration) '{use_uvm_seeding:'h1, m_leaf_name:"cfg", m_inst_id:365, m_inst_count:372, __m_uvm_status_container:{ ref to class uvm_status_container}, uvm_global_copy_map:'{}, type_name:"axi_configuration"}
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env.mst_agent = null (failed lookup)
@@ -120,10 +120,20 @@
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.scb.analysis_imp.recording_detail' (type int) read by uvm_test_top.env.scb.analysis_imp = null (failed lookup)
 #0 in \uvm_port_base#(uvm_pkg::uvm_tlm_if_base#(axi_pkg::axi_transaction,axi_pkg::axi_transaction))::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_port_base.svh:244
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.scb.analysis_imp.check_connection_relationships' (type logic signed[4095:0]) read by uvm_test_top.env.scb.analysis_imp = null (failed lookup)
+#0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.cov.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env.cov = null (failed lookup)
+#0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.cov.recording_detail' (type int) read by uvm_test_top.env.cov = null (failed lookup)
+#0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.cov.analysis_imp.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env.cov.analysis_imp = null (failed lookup)
+#0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.cov.analysis_imp.recording_detail' (type int) read by uvm_test_top.env.cov.analysis_imp = null (failed lookup)
+#0 in \uvm_port_base#(uvm_pkg::uvm_tlm_if_base#(axi_pkg::axi_transaction,axi_pkg::axi_transaction))::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_port_base.svh:244
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.cov.analysis_imp.check_connection_relationships' (type logic signed[4095:0]) read by uvm_test_top.env.cov.analysis_imp = null (failed lookup)
 #0 in \axi_master_agent::build_phase  at ../vip/./axi_master_agent.sv:24
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.vif' (type virtual interface axi_if#(32,16,8,4)) read by uvm_test_top.env.mst_agent = (virtual interface axi_if#(32,16,8,4)) '{aclk:'h0, arst:'h1, awid:'hxx, awaddr:'hxxxx, awlen:'hxx, awsize:'hx, awburst:'hx, awlock:'hx, awcache:'hx, awprot:'hx, awvalid:'hx, awready:'h0, wdata:'hxxxxxxxx, wstrb:'hx, wlast:'hx, wvalid:'hx, wready:'h0, bid:'h0, bresp:'h0, bvalid:'h0, bready:'hx, arid:'hxx, araddr:'hxxxx, arlen:'hxx, arsize:'hx, arburst:'hx, arlock:'hx, arcache:'hx, arprot:'hx, arvalid:'hx, arready:'h0, rid:'h0, rdata:'h0, rresp:'h0, rlast:'h0, rvalid:'h0, rready:'hx}
 #0 in \axi_master_agent::build_phase  at ../vip/./axi_master_agent.sv:27
-@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.cfg' (type class axi_pkg::axi_configuration) read by uvm_test_top.env.mst_agent = (class axi_pkg::axi_configuration) '{use_uvm_seeding:'h1, m_leaf_name:"cfg", m_inst_id:365, m_inst_count:550, __m_uvm_status_container:{ ref to class uvm_status_container}, uvm_global_copy_map:'{}, type_name:"axi_configuration"}
+@ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.cfg' (type class axi_pkg::axi_configuration) read by uvm_test_top.env.mst_agent = (class axi_pkg::axi_configuration) '{use_uvm_seeding:'h1, m_leaf_name:"cfg", m_inst_id:365, m_inst_count:569, __m_uvm_status_container:{ ref to class uvm_status_container}, uvm_global_copy_map:'{}, type_name:"axi_configuration"}
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1911
 @ 0: [CFGDB/GET] Configuration 'uvm_test_top.env.mst_agent.sequencer.recording_detail' (type logic signed[4095:0]) read by uvm_test_top.env.mst_agent.sequencer = null (failed lookup)
 #0 in \uvm_component::new  at /opt/synopsys/vcs201809/etc/uvm-1.2/base/uvm_component.svh:1912
