@@ -9,6 +9,8 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
     int unsigned check_count;   //total beats compared
     int unsigned error_count;   //total error beats
 
+    //associative array: simulate DUT's expected behaviours
+    //only be write-in data's address occupy memory
     bit [31:0] ref_mem[bit [15:0]];
 
     function new(string name = "axiram_scoreboard", uvm_component parent = null);
@@ -24,6 +26,9 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         endcase
     endfunction
 
+    //extract wdata from write-transaction
+    //merge wdata with wstrb and form a new data(expected data)
+    //store expected data in ref_mem
     local function void process_write(axi_transaction tr);
         int beats;
         bit [15:0] addr;
@@ -40,6 +45,8 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         end
     endfunction
 
+    //extract rdata from read-transaction
+    //compare rdata with expected data in ref_mem
     local function void process_read(axi_transaction tr);
         int beats;
         bit [15:0] addr;
