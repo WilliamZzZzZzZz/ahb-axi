@@ -16,6 +16,8 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
         //TODO new every covergroup below
         cg_trans_type = new();
         cg_burst_len  = new();
+        cg_burst_size = new();
+        cg_burst_type = new();
     endfunction
 
     //automatically callback while monitor finish every single transaction
@@ -37,6 +39,12 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
         //TODO sample every covergroup
         cg_trans_type.sample();
         cg_burst_len.sample();
+        cg_burst_size.sample();
+        cg_burst_type.sample();
+    endfunction
+
+    function void report_phase(uvm_phase phase);
+        super.report_phase(phase);
     endfunction
 
     //trans_type
@@ -49,6 +57,7 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
             bins read  = {READ};
         }
     endgroup
+    
     //burst_len
     covergroup cg_burst_len;
         option.per_instance = 1;
@@ -62,6 +71,7 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
             bins beats_16    = {BURST_LEN_16BEATS};
         }
     endgroup
+    
     //burst_size
     //for DATA_WIDTH = 32, burst size only can be 1, 2, 4
     covergroup cg_burst_size;
@@ -72,6 +82,17 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
             bins byte_1 = {BURST_SIZE_1BYTE};
             bins byte_2 = {BURST_SIZE_2BYTES};
             bins byte_4 = {BURST_SIZE_4BYTES};
+        }
+    endgroup
+
+    //burst_type
+    covergroup cg_burst_type;
+        option.per_instance = 1;
+        option.name = "burst type coverage";
+
+        BURST_TYPE: coverpoint burst_type {
+            bins fixed_mode = {FIXED};
+            bins incr_mode  = {INCR};
         }
     endgroup
 endclass
