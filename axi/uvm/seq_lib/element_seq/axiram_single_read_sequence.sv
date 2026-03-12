@@ -9,6 +9,7 @@ class axiram_single_read_sequence extends axiram_base_sequence;
     rand bit[31:0] data;
     rand burst_len_enum burst_len;
     rand burst_type_enum burst_type;
+    rand burst_size_enum burst_size;
 
     bit [31:0] every_beat_data[];   //store every beat's data
 
@@ -25,19 +26,13 @@ class axiram_single_read_sequence extends axiram_base_sequence;
     axi_single.addr        = addr;
     axi_single.burst_len   = burst_len;
     axi_single.burst_type  = burst_type;
+    axi_single.burst_size  = burst_size;
 
     axi_single.start(p_sequencer.axi_mst_sqr);
 
     every_beat_data = axi_single.every_beat_data;
     data            = axi_single.data;
 
-    // `uvm_do_on_with(axi_single, p_sequencer.axi_mst_sqr, {
-    //     trans_type  == READ;
-    //     addr        == local::addr;
-    //     burst_len   == local::burst_len;
-    //     burst_type  == local::burst_type;
-    // })
-    // data = axi_single.data;
     `uvm_info(get_type_name(), "exiting...", UVM_LOW)
     endtask
 endclass

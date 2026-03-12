@@ -9,8 +9,10 @@ class axi_master_single_sequence extends axi_base_sequence;
     rand trans_type_enum trans_type;
     rand burst_len_enum burst_len;
     rand burst_type_enum burst_type;
+    rand burst_size_enum burst_size;
 
     bit [31:0] every_beat_data[];   //store every beat's data
+    bit [3:0] every_beat_wstrb[];
 
     constraint single_trans_type_cstr {
         trans_type inside {READ, WRITE};
@@ -48,7 +50,7 @@ class axi_master_single_sequence extends axi_base_sequence;
             awid            == 0;                  //smoke test only
             awaddr          == local::addr;
             awlen           == local::burst_len;
-            awsize          == BURST_SIZE_4BYTES;
+            awsize          == local::burst_size;
             awburst         == local::burst_type;
             awlock          == NORMAL;
             awcache         == NONBUFFER;
@@ -61,7 +63,8 @@ class axi_master_single_sequence extends axi_base_sequence;
 
         foreach(every_beat_data[i]) begin
             req.wdata[i] = every_beat_data[i];
-            req.wstrb[i] = 4'hF;
+            //use custom value if have defined, otherwise use 4'hF
+            req.wstrb[i] = (every_beat_wstrb.size() > i) ? every_beat_wstrb[i] : 4'hF;
         end
         
         finish_item(req);
@@ -87,7 +90,7 @@ class axi_master_single_sequence extends axi_base_sequence;
             arid        == 0;
             araddr      == local::addr;
             arlen       == local::burst_len;
-            arsize      == BURST_SIZE_4BYTES;
+            arsize      == local::burst_size;
             arburst     == local::burst_type;
             arlock      == NORMAL;
             arcache     == NONBUFFER;

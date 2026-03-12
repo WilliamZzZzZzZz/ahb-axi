@@ -76,12 +76,14 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         burst_size_enum burst_size,
         int             beat_idx
     );
+        bit [15:0] raw_addr;
         if(burst_type == FIXED)  begin
-            return base_addr;
+            raw_addr = base_addr;
         end
         else begin  //INCR
-            return base_addr + beat_idx * (1 << int'(burst_size));
+            raw_addr = base_addr + beat_idx * (1 << int'(burst_size));
         end
+        return {raw_addr[15:2], 2'b00};
     endfunction
 
     //according to wstrb, merge old_data and new_data

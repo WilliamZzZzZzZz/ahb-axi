@@ -9,8 +9,10 @@ class axiram_single_write_sequence extends axiram_base_sequence;
     rand bit [31:0] data;
     rand burst_len_enum burst_len;
     rand burst_type_enum burst_type;
+    rand burst_size_enum burst_size;
 
     bit [31:0] every_beat_data[];   //store every beat's data    
+    bit [3:0] every_beat_wstrb[];
 
     function new(string name = "axiram_single_write_sequence");
         super.new(name);
@@ -25,8 +27,10 @@ class axiram_single_write_sequence extends axiram_base_sequence;
         axi_single.addr             = addr;
         axi_single.data             = data;
         axi_single.burst_len        = burst_len;
-        axi_single.burst_type       = burst_type; 
+        axi_single.burst_type       = burst_type;
+        axi_single.burst_size       = burst_size; 
         axi_single.every_beat_data  = every_beat_data;       
+        axi_single.every_beat_wstrb = every_beat_wstrb;
 
         axi_single.start(p_sequencer.axi_mst_sqr);
 
