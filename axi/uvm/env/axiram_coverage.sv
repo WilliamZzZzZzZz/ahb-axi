@@ -15,9 +15,7 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
         super.new(name, parent);
         //TODO new every covergroup below
         cg_trans_type = new();
-        cg_burst_len  = new();
-        cg_burst_size = new();
-        cg_burst_type = new();
+        cg_burst = new();
     endfunction
 
     //automatically callback while monitor finish every single transaction
@@ -38,9 +36,7 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
         end
         //TODO sample every covergroup
         cg_trans_type.sample();
-        cg_burst_len.sample();
-        cg_burst_size.sample();
-        cg_burst_type.sample();
+        cg_burst.sample();
     endfunction
 
     function void report_phase(uvm_phase phase);
@@ -57,12 +53,15 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
             bins read  = {READ};
         }
     endgroup
-    
-    //burst_len
-    covergroup cg_burst_len;
-        option.per_instance = 1;
-        option.name = "burst length coverage";
 
+    covergroup cg_burst;
+        option.per_instance = 1;
+        option.name = "burst characteristics coverage";
+
+        BURST_TYPE: coverpoint burst_type {
+            bins fixed = {FIXED};
+            bins incr  = {INCR};
+        }
         BURST_LEN: coverpoint burst_len {
             bins beat_single = {BURST_LEN_SINGLE};
             bins beats_2     = {BURST_LEN_DOUBLE};
@@ -70,30 +69,36 @@ class axiram_coverage extends uvm_subscriber #(axi_transaction);
             bins beats_8     = {BURST_LEN_8BEATS};
             bins beats_16    = {BURST_LEN_16BEATS};
         }
-    endgroup
-    
-    //burst_size
-    //for DATA_WIDTH = 32, burst size only can be 1, 2, 4
-    covergroup cg_burst_size;
-        option.per_instance = 1;
-        option.name = "burst size coverage";
-
         BURST_SIZE: coverpoint burst_size {
             bins byte_1 = {BURST_SIZE_1BYTE};
             bins byte_2 = {BURST_SIZE_2BYTES};
             bins byte_4 = {BURST_SIZE_4BYTES};
         }
+
+        BURST_TYPE_X_LEN:  cross BURST_TYPE, BURST_LEN;
+        BURST_TYPE_X_SIZE: cross BURST_TYPE, BURST_SIZE;
     endgroup
-
-    //burst_type
-    covergroup cg_burst_type;
+    
+    covergroup cg_comprehensive;
         option.per_instance = 1;
-        option.name = "burst type coverage";
+        option.name = "comprehensive cross coverage";
 
-        BURST_TYPE: coverpoint burst_type {
-            bins fixed_mode = {FIXED};
-            bins incr_mode  = {INCR};
+        CP_TYPE: coverpoint trans_type {
+            bins write = {WRITE};
+            bins read  = {READ};
         }
+        CP_BURST: coverpoint burst_type {
+            bins fixed = {FIXED};
+            bins incr  = {INCR};
+        }
+        CP_LEN: coverpoint burst_len {
+            bins beat_single = {BURST_LEN_SINGLE};
+            bins beats_2     = {BURST_LEN_DOUBLE};
+            bins beats_4     = {BURST_LEN_4BEATS};
+            bins beats_8     = {BURST_LEN_8BEATS};
+            bins beats_16    = {BURST_LEN_16BEATS};
+        }
+        TYPE_X_BURST_X_LEN: cross CP_TYPE, CP_BURST, CP_LEN;   
     endgroup
 endclass
 
