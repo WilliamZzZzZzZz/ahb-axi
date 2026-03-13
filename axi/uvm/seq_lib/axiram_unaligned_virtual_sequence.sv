@@ -10,14 +10,36 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
 
     virtual task body();
         super.body();
+
+        //single beat transfer with 3 different offsets
         test_single_beat_unaligned(16'h2000, 1); 
+        test_single_beat_unaligned(16'h2100, 2);
+        test_single_beat_unaligned(16'h2200, 3);
+    endtask
+    
+    //AXI protocal: with INCR mode, only first beat allow unaligned, following beats will aligned automatically
+    virtual task test_unaligned_incr(bit [15:0] start_addr, int num_beats);
+        int offset = start_addr[1:0];
+        bit [15:0] aligned_addr = {start_addr[15:2], 2'b00};
+        bit [31:0] every_beat_wdata[];
+        bit [3:0]  every_beat_wstrb[];
+
+        //create actual num of wdata and wstrb
+        every_beat_wdata = new[num_beats];
+        every_beat_wstrb = new[num_beats];
+
+        for(int i = 0; i < num_beats; i++) begin
+            //eg:num_beats = 4, beat1:32'hA000_0000, beat2:32'hA000_0011, ...
+            every_beat_wdata[i] = 32'hA000_0000 + (i << 4) + i;
+            //
+            if(i == 0) begin
+                every_beat_wstrb[i] = (4'hF << offsets) & 4'hF;
+            end 
+        end
 
     endtask
 
-    virtual task test_single_beat_unaligned( 
-        bit [15:0] base_addr,
-        int        offset  
-    );
+    virtual task test_single_beat_unaligned(bit [15:0] base_addr, int offset);
         bit [31:0] init_data = 32'hDEAD_BEEF;
         bit [31:0] new_data  = 32'h1234_5678;
         bit [3:0]  unaligned_wstrb;
@@ -35,7 +57,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         end
 
         //write in initial data wiht wstrb = 4'hF
-        do_agligned_write(base_addr, init_data);
+        do_aligned_write(base_addr, init_data);
 
         //unaligned write in
         begin
@@ -71,7 +93,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
     endtask
 
 
-    local task do_agligned_write(bit [15:0] addr, bit [31:0] data);
+    local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
         bit [31:0] d[];
         d = new[1];
         d[0] = data;
