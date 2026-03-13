@@ -40,7 +40,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         //unaligned write in
         begin
             bit [31:0] wr_data_arr[];
-            bit [31:0] wr_strb_arr[];
+            bit [3:0] wr_strb_arr[];
             wr_data_arr = new[1];
             wr_strb_arr = new[1];
             wr_data_arr[0] = new_data;
