@@ -14,9 +14,11 @@ class axiram_unaligned_test extends axiram_base_test;
     endfunction
 
     task run_phase(uvm_phase phase);
-
+        axiram_unaligned_virtual_sequence seq = axiram_unaligned_virtual_sequence::type_id::create("seq");
         super.run_phase(phase);
-        
+        phase.raise_objection(this);
+        seq.start(env.virt_sqr);
+        phase.drop_objection(this);
     endtask
 
 endclass
