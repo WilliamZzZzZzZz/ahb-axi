@@ -34,6 +34,10 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         bit [15:0] addr;
         bit [31:0] old_data;
         beats = int'(tr.awlen) + 1;
+        
+        `uvm_info(get_type_name(), $sformatf(
+            "write-action: base_addr=0x%04h len=%0d size=%0d type=%0s",
+            tr.awaddr, tr.awburst, tr.awsize, tr.awburst.name()), UVM_MEDIUM)
 
         for(int i = 0; i < beats; i++) begin
             //get every beat's address
@@ -42,6 +46,10 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
             old_data = ref_mem.exists(addr) ? ref_mem[addr] : 32'h0;
             //merge old_data with wstrb, got new_data and put it in to ref_mem
             ref_mem[addr] = merge_data_with_strb(old_data, tr.wdata[i], tr.wstrb[i]);
+
+            `uvm_info(get_type_name(), $sformatf(
+                "beat[%0d]: addr=0x%04h wdata=0x%08h wstrb=0x%01h -> ref_mem=0x%08h",
+                i, addr, tr.wdata[i], tr.wstrb[i], ref_mem[addr]), UVM_MEDIUM)
         end
     endfunction
 
@@ -60,11 +68,13 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
             //compare_data
             if(tr.rdata[i] !== expected_data) begin
                 error_count++;
-                `uvm_error(get_type_name(), $sformatf("READ data mismatch: beat[%0d] addr=0x%04h exp=0x%08h act=0x%08h",
-                                                        i, addr, expected_data, tr.rdata[i] ))
+                `uvm_error(get_type_name(), $sformatf(
+                    "READ data mismatch: beat[%0d] addr=0x%04h exp=0x%08h act=0x%08h",
+                    i, addr, expected_data, tr.rdata[i] ))
             end else begin
-                `uvm_info(get_type_name(), $sformatf("READ match: beat[%0d] addr=0x%04h data=0x%08h",
-                i, addr, tr.rdata[i]), UVM_HIGH)
+                `uvm_info(get_type_name(), $sformatf(
+                    "READ match: beat[%0d] addr=0x%04h data=0x%08h",
+                    i, addr, tr.rdata[i]), UVM_HIGH)
             end
         end
     endfunction
@@ -75,22 +85,31 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         burst_type_enum burst_type,
         burst_size_enum burst_size,
         int             beat_idx
-    );
-        bit [15:0] raw_addr;
+    );  
+        int unsigned    num_bytes;
+        bit [15:0]      aligned_start;
+        bit [15:0]      beat_addr;
+
+        num_bytes     = 1 << int'(burst_size);      //byte number of every beat 
+        aligned_start = {base_addr[15:2], 2'b00};   //force first unaligned beat align word boundary
+
         if(burst_type == FIXED)  begin
-            raw_addr = base_addr;
+            beat_addr = aligned_start;
         end
         else begin  //INCR
-            raw_addr = base_addr + beat_idx * (1 << int'(burst_size));
+            if(beat_idx == 0)
+                beat_addr = aligned_start;          
+            else
+                beat_addr = aligned_start + beat_idx * num_bytes;   //calculate following beats' aligned address
         end
-        return {raw_addr[15:2], 2'b00};
+        return beat_addr;
     endfunction
 
     //according to wstrb, merge old_data and new_data
     local function bit [31:0] merge_data_with_strb(
         bit [31:0] old_data,
         bit [31:0] new_data,
-        bit [15:0] wstrb
+        bit [3:0] wstrb
     );
         bit [31:0] result;
         result = old_data;

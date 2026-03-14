@@ -10,17 +10,19 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
 
     virtual task body();
         super.body();
-
         //single beat transfer with 3 different offsets
-        test_single_beat_unaligned(16'h2000, 1); 
-        test_single_beat_unaligned(16'h2100, 2);
-        test_single_beat_unaligned(16'h2200, 3);
+        single_beat_unaligned_test(16'h2000, 1); 
+        single_beat_unaligned_test(16'h2100, 2);
+        single_beat_unaligned_test(16'h2200, 3);
+
+        unaligned_incr_test(16'h3001, 2);
+        unaligned_incr_test(16'h3102, 4);
+        unaligned_incr_test(16'h3203, 8);
     endtask
     
     //AXI protocal: with INCR mode, only first beat allow unaligned, following beats will aligned automatically
-    virtual task test_unaligned_incr(bit [15:0] start_addr, int num_beats);
-        int offset = start_addr[1:0];
-        bit [15:0] aligned_addr = {start_addr[15:2], 2'b00};
+    virtual task unaligned_incr_test(bit [15:0] base_addr, int num_beats);
+        bit [15:0] aligned_addr = {base_addr[15:2], 2'b00};
         bit [31:0] every_beat_wdata[];
         bit [3:0]  every_beat_wstrb[];
 
@@ -28,18 +30,38 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         every_beat_wdata = new[num_beats];
         every_beat_wstrb = new[num_beats];
 
+        //generate every beat's data and wstrb
         for(int i = 0; i < num_beats; i++) begin
-            //eg:num_beats = 4, beat1:32'hA000_0000, beat2:32'hA000_0011, ...
             every_beat_wdata[i] = 32'hA000_0000 + (i << 4) + i;
-            //
             if(i == 0) begin
-                every_beat_wstrb[i] = (4'hF << offsets) & 4'hF;
-            end 
+                every_beat_wstrb[i] = (4'hF << offset) & 4'hF;  //first beat unaligned
+            end else begin
+                every_beat_wstrb[i] = 4'hF;    //following beats are aligned
+            end
+        end
+
+        //write-in
+        begin
+            single_write = axiram_single_write_sequence::type_id::create("single_write");
+            single_write.addr              = aligned_addr;
+            single_write.data              = every_beat_wdata[0];
+            single_write.every_beat_data   = every_beat_wdata;
+            single_write.burst_len         = burst_len_enum'(num_beats - 1);
+            single_write.burst_type        = INCR;
+            single_write.start(p_sequencer);
+        end
+        //read-out
+        begin
+            single_read = axiram_single_read_sequence::type_id::create("single_read");
+            single_read.addr               = aligned_addr;
+            single_read.burst_len          = burst_len_enum'(num_beats - 1);
+            single_read.burst_type         = INCR;
+            single_read.start(p_sequencer);
         end
 
     endtask
 
-    virtual task test_single_beat_unaligned(bit [15:0] base_addr, int offset);
+    virtual task single_beat_unaligned_test(bit [15:0] base_addr, int offset);
         bit [31:0] init_data = 32'hDEAD_BEEF;
         bit [31:0] new_data  = 32'h1234_5678;
         bit [3:0]  unaligned_wstrb;
@@ -91,7 +113,6 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         end
 
     endtask
-
 
     local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
         bit [31:0] d[];
