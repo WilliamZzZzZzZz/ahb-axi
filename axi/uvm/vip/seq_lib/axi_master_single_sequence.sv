@@ -56,7 +56,7 @@ class axi_master_single_sequence extends axi_base_sequence;
             awcache         == NONBUFFER;
             awprot          == NPRI_SEC_DATA;
             wdata.size()    == local::actual_beats;
-            wdata.size()    == local::actual_beats;            
+            wstrb.size()    == local::actual_beats;            
         }) begin
             `uvm_fatal(get_type_name(), "randomize failed in vip-write-transaction")
         end

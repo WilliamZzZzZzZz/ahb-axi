@@ -90,10 +90,10 @@ class axi_transaction extends uvm_sequence_item;
     }
     
     // 4 bytes align
-    constraint c_align {
-        awaddr[1:0] == 2'b00;  
-        araddr[1:0] == 2'b00;
-    }
+    // constraint c_align {
+    //     awaddr[1:0] == 2'b00;  
+    //     araddr[1:0] == 2'b00;
+    // }
     
     // AXI4 protocol: actual burst size = awlen + 1
     constraint c_data_size {
@@ -116,11 +116,11 @@ class axi_transaction extends uvm_sequence_item;
     // }
     
     // wstrb = 4'h1111 -> default all btyes allow to write in 
-    constraint c_wstrb {
-        foreach(wstrb[i]) {
-            wstrb[i] == 4'hF;
-        }
-    }
+    // constraint c_wstrb {
+    //     foreach(wstrb[i]) {
+    //         wstrb[i] == 4'hF;
+    //     }
+    // }
     
     `uvm_object_utils_begin(axi_transaction)
         `uvm_field_enum(trans_type_enum, trans_type, UVM_ALL_ON)

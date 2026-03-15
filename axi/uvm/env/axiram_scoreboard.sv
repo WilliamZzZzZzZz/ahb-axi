@@ -37,7 +37,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         
         `uvm_info(get_type_name(), $sformatf(
             "write-action: base_addr=0x%04h len=%0d size=%0d type=%0s",
-            tr.awaddr, tr.awburst, tr.awsize, tr.awburst.name()), UVM_MEDIUM)
+            tr.awaddr, tr.awlen, tr.awsize, tr.awburst.name()), UVM_MEDIUM)
 
         for(int i = 0; i < beats; i++) begin
             //get every beat's address
@@ -48,7 +48,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
             ref_mem[addr] = merge_data_with_strb(old_data, tr.wdata[i], tr.wstrb[i]);
 
             `uvm_info(get_type_name(), $sformatf(
-                "beat[%0d]: addr=0x%04h wdata=0x%08h wstrb=0x%01h -> ref_mem=0x%08h",
+                "beat[%0d]: addr=0x%04h wdata=0x%08h wstrb=0x%04b -> ref_mem=0x%08h",
                 i, addr, tr.wdata[i], tr.wstrb[i], ref_mem[addr]), UVM_MEDIUM)
         end
     endfunction

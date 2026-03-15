@@ -11,9 +11,9 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
     virtual task body();
         super.body();
         //single beat transfer with 3 different offsets
-        // single_beat_unaligned_test(16'h2000, 1); 
-        // single_beat_unaligned_test(16'h2100, 2);
-        // single_beat_unaligned_test(16'h2200, 3);
+        single_beat_unaligned_test(16'h2000, 1); 
+        single_beat_unaligned_test(16'h2100, 2);
+        single_beat_unaligned_test(16'h2200, 3);
 
         unaligned_incr_test(16'h3001, 2);
         unaligned_incr_test(16'h3102, 4);
@@ -22,6 +22,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
     
     //AXI protocal: with INCR mode, only first beat allow unaligned, following beats will aligned automatically
     virtual task unaligned_incr_test(bit [15:0] base_addr, int num_beats);
+        bit [31:0] init_data = 32'hBBBB_BBBB;
         bit [15:0] aligned_addr = {base_addr[15:2], 2'b00};
         bit [31:0] every_beat_wdata[];
         bit [3:0]  every_beat_wstrb[];
@@ -33,7 +34,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
 
         //generate every beat's data and wstrb
         for(int i = 0; i < num_beats; i++) begin
-            every_beat_wdata[i] = 32'hA000_0000 + (i << 4) + i;
+            every_beat_wdata[i] = 32'h0000_0000 + (i << 4) + i;
             if(i == 0) begin
                 every_beat_wstrb[i] = (4'hF << offsets) & 4'hF;  //first beat unaligned
             end else begin
@@ -47,7 +48,9 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
             single_write.addr              = base_addr;
             single_write.data              = every_beat_wdata[0];
             single_write.every_beat_data   = every_beat_wdata;
+            single_write.every_beat_wstrb  = every_beat_wstrb;
             single_write.burst_len         = burst_len_enum'(num_beats - 1);
+            single_write.burst_size        = BURST_SIZE_4BYTES;
             single_write.burst_type        = INCR;
             single_write.start(p_sequencer);
         end
@@ -56,6 +59,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
             single_read = axiram_single_read_sequence::type_id::create("single_read");
             single_read.addr               = base_addr;
             single_read.burst_len          = burst_len_enum'(num_beats - 1);
+            single_read.burst_size         = BURST_SIZE_4BYTES;
             single_read.burst_type         = INCR;
             single_read.start(p_sequencer);
         end
@@ -80,7 +84,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         end
 
         //write in initial data wiht wstrb = 4'hF
-        do_aligned_write(base_addr, init_data);
+        do_aligned_write(base_addr, init_data, 1);
 
         //unaligned write in
         begin
@@ -115,7 +119,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
 
     endtask
 
-    local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
+    local task do_aligned_write(bit [15:0] addr, bit [31:0] data, int num_beats);
         bit [31:0] d[];
         d = new[1];
         d[0] = data;
@@ -123,7 +127,8 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         single_write.addr            = addr;
         single_write.data            = data;
         single_write.every_beat_data = d;
-        single_write.burst_len       = BURST_LEN_SINGLE;
+        single_write.burst_len       = burst_len_enum'(num_beats - 1);
+        single_write.burst_size      = BURST_SIZE_4BYTES;
         single_write.burst_type      = INCR;
         single_write.start(p_sequencer);
     endtask
