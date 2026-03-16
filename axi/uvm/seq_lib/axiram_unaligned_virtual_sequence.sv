@@ -11,15 +11,15 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
     virtual task body();
         super.body();
         //single beat transfer with 3 different offsets
-        single_beat_unaligned_test(16'h2000, 1); 
-        single_beat_unaligned_test(16'h2100, 2);
-        single_beat_unaligned_test(16'h2200, 3);
+        single_beat_unaligned_test(16'h2101, 1); 
+        single_beat_unaligned_test(16'h2202, 2);
+        single_beat_unaligned_test(16'h2303, 3);
 
-        unaligned_incr_test(16'h3001, 2);
+        unaligned_incr_test(16'h3101, 2);
         unaligned_incr_test(16'h3102, 4);
         unaligned_incr_test(16'h3203, 8);
 
-        unaligned_fixed_test(16'h4001, 2);
+        unaligned_fixed_test(16'h4101, 2);
         unaligned_fixed_test(16'h4202, 4);
         unaligned_fixed_test(16'h4303, 8);
     endtask
@@ -29,10 +29,15 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         bit [31:0] every_beat_wdata[];
         bit [3:0]  every_beat_wstrb[];
         int offsets = base_addr[1:0];
+        bit [31:0] init_data = 32'hAAAA_AAAA;
 
         every_beat_wdata = new[num_beats];
         every_beat_wstrb = new[num_beats];
 
+        //pre write-in initial data
+        do_aligned_write(base_addr, init_data);
+
+        //generate every beat's wdata and wstrb
         for(int i = 0; i < num_beats; i++) begin
             every_beat_wdata[i] = 32'h1111_1111 + (i << 4) + i;
             every_beat_wstrb[i] = (4'hF << offsets) & 4'hF;
@@ -65,10 +70,20 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         bit [31:0] every_beat_wdata[];
         bit [3:0]  every_beat_wstrb[];
         int offsets = base_addr[1:0];
+        bit [15:0] beat_addr;   //every beat addr,use for pre write-in
 
         //create actual num of wdata and wstrb
         every_beat_wdata = new[num_beats];
         every_beat_wstrb = new[num_beats];
+
+        //pre write-in initial data
+        for(int i = 0; i < num_beats; i++) begin
+            if(i == 0)
+                beat_addr = aligned_addr;
+            else
+                beat_addr = aligned_addr + i*4;
+            do_aligned_write(beat_addr, init_data);
+        end
 
         //generate every beat's data and wstrb
         for(int i = 0; i < num_beats; i++) begin
@@ -121,8 +136,8 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
                 expected_data[lane*8 +: 8] = new_data[lane*8 +: 8];
         end
 
-        //write in initial data wiht wstrb = 4'hF
-        do_aligned_write(base_addr, init_data, 1);
+        //pre write-in initial data
+        do_aligned_write(base_addr, init_data);
 
         //unaligned write in
         begin
@@ -157,7 +172,8 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
 
     endtask
 
-    local task do_aligned_write(bit [15:0] addr, bit [31:0] data, int num_beats);
+    //single beat pre write-in initial data
+    local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
         bit [31:0] d[];
         d = new[1];
         d[0] = data;
@@ -165,7 +181,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         single_write.addr            = addr;
         single_write.data            = data;
         single_write.every_beat_data = d;
-        single_write.burst_len       = burst_len_enum'(num_beats - 1);
+        single_write.burst_len       = BURST_LEN_SINGLE;
         single_write.burst_size      = BURST_SIZE_4BYTES;
         single_write.burst_type      = INCR;
         single_write.start(p_sequencer);
