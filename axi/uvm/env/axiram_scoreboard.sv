@@ -32,6 +32,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
     local function void process_write(axi_transaction tr);
         int beats;
         bit [15:0] addr;
+        bit [15:0] word_addr;
         bit [31:0] old_data;
         beats = int'(tr.awlen) + 1;
         
@@ -42,14 +43,15 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         for(int i = 0; i < beats; i++) begin
             //get every beat's address
             addr = calculate_beat_addr(tr.awaddr, tr.awburst, tr.awsize, i);
+            word_addr = {addr[15:2], 2'b00};
             //pull old_data from ref_mem
-            old_data = ref_mem.exists(addr) ? ref_mem[addr] : 32'h0;
+            old_data = ref_mem.exists(word_addr) ? ref_mem[word_addr] : 32'h0;
             //merge old_data with wstrb, got new_data and put it in to ref_mem
-            ref_mem[addr] = merge_data_with_strb(old_data, tr.wdata[i], tr.wstrb[i]);
+            ref_mem[word_addr] = merge_data_with_strb(old_data, tr.wdata[i], tr.wstrb[i]);
 
             `uvm_info(get_type_name(), $sformatf(
-                "beat[%0d]: addr=0x%04h wdata=0x%08h wstrb=0x%04b -> ref_mem=0x%08h",
-                i, addr, tr.wdata[i], tr.wstrb[i], ref_mem[addr]), UVM_MEDIUM)
+                "beat[%0d]: word_addr=0x%04h wdata=0x%08h wstrb=0x%04b -> ref_mem=0x%08h",
+                i, word_addr, tr.wdata[i], tr.wstrb[i], ref_mem[word_addr]), UVM_MEDIUM)
         end
     endfunction
 
@@ -58,12 +60,14 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
     local function void process_read(axi_transaction tr);
         int beats;
         bit [15:0] addr;
+        bit [15:0] word_addr;
         bit [31:0] expected_data;
         beats = int'(tr.arlen) + 1;
 
         for(int i = 0; i < beats; i++) begin
             addr = calculate_beat_addr(tr.araddr, tr.arburst, tr.arsize, i);
-            expected_data = ref_mem.exists(addr) ? ref_mem[addr] : 32'h0;
+            word_addr = {addr[15:2], 2'b00};
+            expected_data = ref_mem.exists(word_addr) ? ref_mem[word_addr] : 32'h0;
             check_count++;
             //compare_data
             if(tr.rdata[i] !== expected_data) begin
@@ -91,7 +95,7 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         bit [15:0]      beat_addr;
 
         num_bytes     = 1 << int'(burst_size);      //byte number of every beat 
-        aligned_start = {base_addr[15:2], 2'b00};   //force first unaligned beat align word boundary
+        aligned_start = (base_addr >> int'(burst_size)) << int'(burst_size);   
 
         if(burst_type == FIXED)  begin
             beat_addr = aligned_start;
