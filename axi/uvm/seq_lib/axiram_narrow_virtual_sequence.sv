@@ -10,9 +10,9 @@ class axiram_narrow_virtual_sequence extends axiram_base_test;
 
     virtual task body();
         super.body();
-        narrow_incr_test(16'h7000, 4, BURST_SIZE_1BYTE);
-        narrow_incr_test(16'h7100, 2, BURST_SIZE_2BYTE);
-        narrow_incr_test(16'h7202, 4, BURST_SIZE_1BYTE);
+        narrow_incr_test(16'h7000, 4, BURST_SIZE_1BYTE);    //no cross boundary test(full word)
+        narrow_incr_test(16'h7100, 2, BURST_SIZE_2BYTE);    //no cross boundary test(full word)
+        narrow_incr_test(16'h7202, 4, BURST_SIZE_1BYTE);    //cross boundary test
     endtask
 
     virtual task narrow_incr_test(bit [15:0] base_addr, int num_beats, burst_size_enum burst_size);
@@ -27,6 +27,9 @@ class axiram_narrow_virtual_sequence extends axiram_base_test;
         
         wdata_arr = new[num_beats];
         wstrb_arr = new[num_beats];
+
+        //no cross boundary: first_word_addr = last_word_addr
+        //cross boundary:   first_word_addr != last_word_addr
         first_word_addr = {base_addr[15:2], 2'b00};
         last_beat_addr  = base_addr + (num_beats - 1) * stride;
         last_word_addr  = {last_beat_addr[15:0], 2'b00};
