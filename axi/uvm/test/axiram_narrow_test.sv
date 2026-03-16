@@ -4,7 +4,7 @@
 class axiram_narrow_test extends axiram_base_test;
     `uvm_component_utils(axiram_narrow_test)
 
-    function void new(string name = "axiram_narrow_test", uvm_component parent);
+    function new(string name = "axiram_narrow_test", uvm_component parent);
         super.new(name, parent);
     endfunction
 
@@ -12,7 +12,7 @@ class axiram_narrow_test extends axiram_base_test;
         super.build_phase(phase);
     endfunction
 
-    task run_phase();
+    task run_phase(uvm_phase phase);
         axiram_base_virtual_sequence seq = axiram_narrow_virtual_sequence::type_id::create("seq");
         super.run_phase(phase);
 
