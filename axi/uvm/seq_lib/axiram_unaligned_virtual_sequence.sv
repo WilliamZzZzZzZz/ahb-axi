@@ -18,9 +18,47 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         unaligned_incr_test(16'h3001, 2);
         unaligned_incr_test(16'h3102, 4);
         unaligned_incr_test(16'h3203, 8);
+
+        unaligned_fixed_test(16'h4001, 2);
+        unaligned_fixed_test(16'h4202, 4);
+        unaligned_fixed_test(16'h4303, 8);
+    endtask
+
+    //AXI protocol: with FIXED mode, every beat wstrb are same as first beat
+    virtual task unaligned_fixed_test(bit [15:0] base_addr, int num_beats);
+        bit [31:0] every_beat_wdata[];
+        bit [3:0]  every_beat_wstrb[];
+        int offsets = base_addr[1:0];
+
+        every_beat_wdata = new[num_beats];
+        every_beat_wstrb = new[num_beats];
+
+        for(int i = 0; i < num_beats; i++) begin
+            every_beat_wdata[i] = 32'h1111_1111 + (i << 4) + i;
+            every_beat_wstrb[i] = (4'hF << offsets) & 4'hF;
+        end
+
+        //write-in
+        single_write = axiram_single_write_sequence::type_id::create("single_write");
+        single_write.addr               = base_addr;
+        single_write.data               = every_beat_data[0];
+        single_write.every_beat_data    = every_beat_wdata;
+        single_write.every_beat_wstrb   = every_beat_wstrb;
+        single_write.burst_len          = burst_len_enum'(num_beats - 1);
+        single_write.burst_size         = BURST_SIZE_4BYTES;
+        single_write.burst_type         = FIXED;
+        single_write.start(p_sequencer);
+
+        //read-out
+        single_read = axiram_single_read_sequence::type_id::create("single_read");
+        single_read.addr                = base_addr;
+        single_read.burst_len           = burst_len_enum'(num_beats - 1);
+        single_read.burst_size          = BURST_SIZE_4BYTES;
+        single_read.burst_type          = FIXED;
+        single_read.start(p_sequencer);
     endtask
     
-    //AXI protocal: with INCR mode, only first beat allow unaligned, following beats will aligned automatically
+    //AXI protocol: with INCR mode, only first beat allow unaligned, following beats will aligned automatically
     virtual task unaligned_incr_test(bit [15:0] base_addr, int num_beats);
         bit [31:0] init_data = 32'hBBBB_BBBB;
         bit [15:0] aligned_addr = {base_addr[15:2], 2'b00};
