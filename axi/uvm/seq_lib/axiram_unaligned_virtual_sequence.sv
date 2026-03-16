@@ -41,7 +41,7 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
         //write-in
         single_write = axiram_single_write_sequence::type_id::create("single_write");
         single_write.addr               = base_addr;
-        single_write.data               = every_beat_data[0];
+        single_write.data               = every_beat_wdata[0];
         single_write.every_beat_data    = every_beat_wdata;
         single_write.every_beat_wstrb   = every_beat_wstrb;
         single_write.burst_len          = burst_len_enum'(num_beats - 1);
