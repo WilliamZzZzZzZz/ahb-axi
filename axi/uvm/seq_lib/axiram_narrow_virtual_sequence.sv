@@ -10,9 +10,42 @@ class axiram_narrow_virtual_sequence extends axiram_base_virtual_sequence;
 
     virtual task body();
         super.body();
-        narrow_incr_test(16'h7000, 4, BURST_SIZE_1BYTE);    //no cross boundary test(full word)
-        narrow_incr_test(16'h7100, 2, BURST_SIZE_2BYTES);   //no cross boundary test(full word)
-        narrow_incr_test(16'h7202, 4, BURST_SIZE_1BYTE);    //cross boundary test
+        sweep_narrow_incr();
+    endtask
+
+    // Systematically sweep all (burst_size, starting_offset, num_beats) combinations.
+    // For a 32-bit bus, narrow sizes are 1BYTE and 2BYTES.
+    //   1BYTE  : offsets 0,1,2,3  ×  beats 1..8  →  32 cases
+    //   2BYTES : offsets 0,2      ×  beats 1..8  →  16 cases
+    // Total: 48 test cases covering no-cross / single-cross / multi-cross boundary scenarios.
+    virtual task sweep_narrow_incr();
+        bit [15:0]      region_base   = 16'h7000;
+        int             test_id       = 0;
+        burst_size_enum narrow_sizes[] = '{BURST_SIZE_1BYTE, BURST_SIZE_2BYTES};
+
+        foreach (narrow_sizes[s]) begin
+            int stride = 1 << int'(narrow_sizes[s]);
+
+            // all valid byte-lane offsets within a 4-byte word
+            for (int offset = 0; offset < 4; offset += stride) begin
+                // beat counts from 1 to 8
+                for (int nbeats = 1; nbeats <= 8; nbeats++) begin
+                    // each test owns a 0x20-byte address region to avoid overlap
+                    bit [15:0] test_addr = region_base + test_id * 'h20 + offset;
+
+                    `uvm_info(get_type_name(), $sformatf(
+                        "Test #%0d: size=%s, offset=%0d, beats=%0d, addr=0x%04h",
+                        test_id, narrow_sizes[s].name(), offset, nbeats, test_addr),
+                        UVM_MEDIUM)
+
+                    narrow_incr_test(test_addr, nbeats, narrow_sizes[s]);
+                    test_id++;
+                end
+            end
+        end
+
+        `uvm_info(get_type_name(), $sformatf(
+            "Sweep complete: %0d narrow INCR test cases executed", test_id), UVM_LOW)
     endtask
 
     virtual task narrow_incr_test(bit [15:0] base_addr, int num_beats, burst_size_enum burst_size);
@@ -88,13 +121,15 @@ class axiram_narrow_virtual_sequence extends axiram_base_virtual_sequence;
         end
     endtask
 
-    //single beat pre write-in initial data
+    // Issue a single aligned write beat to seed initial data before a narrow test.
     local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
-        bit [31:0] init_data_arr[] = `{data};
+        // every_beat_data requires a dynamic array, so wrap the scalar in a 1-entry array
+        bit [31:0] init_data_arr[] = '{data};
+
         single_write = axiram_single_write_sequence::type_id::create("single_write");
         single_write.addr            = addr;
         single_write.data            = data;
-        single_write.every_beat_data = d;
+        single_write.every_beat_data = init_data_arr;
         single_write.burst_len       = BURST_LEN_SINGLE;
         single_write.burst_size      = BURST_SIZE_4BYTES;
         single_write.burst_type      = INCR;
