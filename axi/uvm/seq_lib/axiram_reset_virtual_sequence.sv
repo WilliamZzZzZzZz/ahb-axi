@@ -16,7 +16,7 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
     virtual task write_mid_reset_test();
         bit [31:0] every_beat_data[];
         every_beat_data = new[8];
-        foreach (every_beat_data[i]) every_beat_data[i] = 32'hf0f0_0000 + 1;
+        foreach (every_beat_data[i]) every_beat_data[i] = 32'hf0f0_0000 + i;
         
         `uvm_info(get_type_name(), "--- write_mid_reset_test START ---", UVM_LOW)
         fork

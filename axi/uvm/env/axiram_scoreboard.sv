@@ -31,23 +31,24 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
     //store expected data in ref_mem
     local function void process_write(axi_transaction tr);
         int beats;
-        bit [15:0] addr;
-        bit [15:0] word_addr;
-        bit [31:0] old_data;
+        bit [15:0] addr;            //the raw start_address of first beat
+        bit [15:0] word_addr;       //first beat's aligned address
+        bit [31:0] old_word;
         beats = int'(tr.awlen) + 1;
         
         `uvm_info(get_type_name(), $sformatf(
             "write-action: base_addr=0x%04h len=%0d size=%0d type=%0s",
             tr.awaddr, tr.awlen, tr.awsize, tr.awburst.name()), UVM_MEDIUM)
-
+        
+        //calculate every beat's word_addr, store expected data into ref_mem word by word
         for(int i = 0; i < beats; i++) begin
             //get every beat's address
             addr = calculate_beat_addr(tr.awaddr, tr.awburst, tr.awsize, i);
             word_addr = {addr[15:2], 2'b00};
             //pull old_data from ref_mem
-            old_data = ref_mem.exists(word_addr) ? ref_mem[word_addr] : 32'h0;
+            old_word = ref_mem.exists(word_addr) ? ref_mem[word_addr] : 32'h0;
             //merge old_data with wstrb, got new_data and put it in to ref_mem
-            ref_mem[word_addr] = merge_data_with_strb(old_data, tr.wdata[i], tr.wstrb[i]);
+            ref_mem[word_addr] = merge_data_with_strb(old_word, tr.wdata[i], tr.wstrb[i]);
 
             `uvm_info(get_type_name(), $sformatf(
                 "beat[%0d]: word_addr=0x%04h wdata=0x%08h wstrb=0x%04b -> ref_mem=0x%08h",
@@ -90,21 +91,21 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         burst_size_enum burst_size,
         int             beat_idx
     );  
-        int unsigned    num_bytes;
+        int unsigned    stride;
         bit [15:0]      aligned_start;
         bit [15:0]      beat_addr;
 
-        num_bytes     = 1 << int'(burst_size);      //byte number of every beat 
-        aligned_start = (base_addr >> int'(burst_size)) << int'(burst_size);   
+        stride        = 1 << int'(burst_size);      //byte number of every beat 
+        aligned_start = (base_addr >> int'(burst_size)) << int'(burst_size);    //dynamically calculate first beat's aligned addr according to burst_szie
 
         if(burst_type == FIXED)  begin
-            beat_addr = aligned_start;
+            beat_addr = base_addr;
         end
         else begin  //INCR
             if(beat_idx == 0)
-                beat_addr = aligned_start;          
+                beat_addr = base_addr;          //AXI protocol: under unaligned trans, INCR's first beat addr keep the unaligned address 
             else
-                beat_addr = aligned_start + beat_idx * num_bytes;   //calculate following beats' aligned address
+                beat_addr = aligned_start + beat_idx * stride;   //calculate following beats' aligned address
         end
         return beat_addr;
     endfunction
@@ -115,15 +116,15 @@ class axiram_scoreboard extends uvm_subscriber #(axi_transaction);
         bit [31:0] new_data,
         bit [3:0] wstrb
     );
-        bit [31:0] result;
-        result = old_data;
+        bit [31:0] new_word;
+        new_word = old_data;
 
         //according to wstrb, merge old_data and new_data
         for(int lane = 0; lane < 4; lane++) begin
             if(wstrb[lane])
-                result[lane*8 +: 8] = new_data[lane*8 +: 8];
+                new_word[lane*8 +: 8] = new_data[lane*8 +: 8];
         end 
-        return result;
+        return new_word;
     endfunction
 
     //automatically print report info
