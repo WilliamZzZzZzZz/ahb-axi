@@ -15,6 +15,11 @@ VFILES   +=  ../vip/axi_pkg.sv \
 						 ../env/axiram_pkg.sv \
 						 ../testbench/axiram_tb.sv
 
+# T= shorthand: "make run T=narrow GUI=1 &" expands to TESTNAME=axiram_narrow_test
+ifdef T
+TESTNAME = axiram_$(T)_test
+endif
+
 
 #############################
 # Environment variables
@@ -47,15 +52,34 @@ prepare:
 	mkdir -p $(OUT)/obj
 
 comp: prepare
-	$(VCOMP) 
+	$(VCOMP)
 	$(VCOMP) $(DFILES) $(VFILES)
 
 elab: comp
 	$(ELAB) -top $(TB) -o $(OUT)/obj/$(TB).simv
 
 run:
-	$(RUN) 
+	$(RUN)
 
+#############################
+# Test shortcuts
+# Usage: make <name> GUI=1 &
+#############################
+smoke: TESTNAME = axiram_smoke_test
+smoke: run
+
+fixed: TESTNAME = axiram_fixed_test
+fixed: run
+
+narrow: TESTNAME = axiram_narrow_test
+narrow: run
+
+unaligned: TESTNAME = axiram_unaligned_test
+unaligned: run
+
+#############################
+# Coverage targets
+#############################
 mergecov:
 	urg -format both $(COV_OPTS)
 
@@ -68,6 +92,13 @@ verdicov:
 htmlcov:
 	firefox urgReport/dashboard.html
 
+#############################
+# Utility targets
+#############################
+killdve:
+	@echo "Killing all DVE processes..."
+	-pkill -f dve
+
+KEEP_FILES = Makefile axiram_debug_wave.do axiram_sim_run.do
 clean:
-	rm -rf $(OUT) 64 AN.DB DVEfiles csrc *.simv *.simv.daidir *.simv.vdb ucli.key
-	rm -rf *.log* *.vpd *.h urgReport
+	find . -maxdepth 1 ! -name '.' $(foreach f,$(KEEP_FILES),! -name '$(f)') -exec rm -rf {} +
