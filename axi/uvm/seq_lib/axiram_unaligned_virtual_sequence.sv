@@ -172,15 +172,16 @@ class axiram_unaligned_virtual_sequence extends axiram_base_virtual_sequence;
 
     endtask
 
-    //single beat pre write-in initial data
+    // Issue a single aligned write beat to seed initial data before an unaligned test.
+    // addr must be 4-byte aligned; wstrb defaults to 4'hF (full word).
     local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
-        bit [31:0] d[];
-        d = new[1];
-        d[0] = data;
+        // every_beat_data requires a dynamic array, so wrap the scalar in a 1-entry array
+        bit [31:0] init_data_arr[] = '{data};
+
         single_write = axiram_single_write_sequence::type_id::create("single_write");
         single_write.addr            = addr;
         single_write.data            = data;
-        single_write.every_beat_data = d;
+        single_write.every_beat_data = init_data_arr;
         single_write.burst_len       = BURST_LEN_SINGLE;
         single_write.burst_size      = BURST_SIZE_4BYTES;
         single_write.burst_type      = INCR;

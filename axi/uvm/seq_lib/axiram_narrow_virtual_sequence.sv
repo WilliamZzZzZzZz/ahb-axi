@@ -90,9 +90,7 @@ class axiram_narrow_virtual_sequence extends axiram_base_virtual_sequence;
 
     //single beat pre write-in initial data
     local task do_aligned_write(bit [15:0] addr, bit [31:0] data);
-        bit [31:0] d[];
-        d = new[1];
-        d[0] = data;
+        bit [31:0] init_data_arr[] = `{data};
         single_write = axiram_single_write_sequence::type_id::create("single_write");
         single_write.addr            = addr;
         single_write.data            = data;
