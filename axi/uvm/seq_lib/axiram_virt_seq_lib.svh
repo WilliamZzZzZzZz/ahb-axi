@@ -7,5 +7,6 @@
 `include "axiram_fixed_virtual_sequence.sv"
 `include "axiram_unaligned_virtual_sequence.sv"
 `include "axiram_narrow_virtual_sequence.sv"
+`include "axiram_reset_virtual_sequence.sv"
 
 `endif 

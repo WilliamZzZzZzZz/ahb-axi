@@ -19,6 +19,9 @@ class axiram_base_virtual_sequence extends uvm_sequence;
 
     virtual task body();
         `uvm_info(get_type_name(), "entering...", UVM_LOW)
+        
+        if(!uvm_config_db#(virtual axi_if)::get(p_sequencer, "", "vif", vif))
+            `uvm_fatal(get_type_name(), "Failed to get vif from config_db in virtual sequence")
 
         `uvm_info(get_type_name(), "exiting...", UVM_LOW)
     endtask

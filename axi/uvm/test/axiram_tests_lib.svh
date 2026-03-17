@@ -6,5 +6,6 @@
 `include "axiram_fixed_test.sv"
 `include "axiram_unaligned_test.sv"
 `include "axiram_narrow_test.sv"
+`include "axiram_reset_test.sv"
 
 `endif 

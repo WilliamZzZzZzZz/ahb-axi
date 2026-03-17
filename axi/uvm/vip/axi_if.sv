@@ -257,6 +257,23 @@ interface axi_if #(
         repeat(num) @(posedge aclk);
     endtask
 
+    //force arst HIGH, it can override driver
+    task automatic assert_reset();
+        force arst = 1'b1;
+    endtask
+
+    //release arst->0
+    task automatic deassert_reset();
+        release arst;
+    endtask
+
+    task automatic do_reset(int num_cycles = 5);
+        force arst = 1'b1;
+        repeat(num_cycles) @(posedge aclk);
+        release arst;
+        @(posedge aclk);
+    endtask
+
 endinterface : axi_if
 
 `endif 
