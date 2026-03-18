@@ -49,6 +49,11 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
             end
         join_any
         disable fork;
+
+        begin:POST_MID_RESET_TEST
+            do_single_read(16'h0300);
+            `uvm_info(get_type_name(), "--- post_mid_reset_write_test DONE ---", UVM_LOW)
+        end
         `uvm_info(get_type_name(), "--- write_mid_reset_test END ---", UVM_LOW)
 
     endtask
@@ -82,6 +87,12 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
             end
         join_any
         disable fork;
+
+        begin:POST_MID_RESET_TEST
+            do_single_write(16'h0400, 32'hABCD_ABCD);
+            do_single_read(16'h0400);
+            `uvm_info(get_type_name(), "--- post_mid_reset_read_test DONE ---", UVM_LOW)
+        end
         `uvm_info(get_type_name(), "--- read_mid_reset_test END ---", UVM_LOW)
     endtask
 
@@ -115,6 +126,15 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
         single_write.burst_size = BURST_SIZE_4BYTES;
         single_write.burst_type = INCR;
         single_write.start(p_sequencer);
+    endtask
+
+    local task do_single_read(bit [15:0] addr);
+        single_read = axiram_single_read_sequence::type_id::create("single_read");
+        single_read.addr = addr;
+        single_read.burst_len = BURST_LEN_SINGLE;
+        single_read.burst_size = BURST_SIZE_4BYTES;
+        single_read.burst_type = INCR;
+        single_read.start(p_sequencer);
     endtask
 
 

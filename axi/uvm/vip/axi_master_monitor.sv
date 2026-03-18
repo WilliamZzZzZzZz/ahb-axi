@@ -34,6 +34,7 @@ class axi_master_monitor extends uvm_monitor;
         int q_index[$];
         forever begin
             @(posedge vif.aclk);
+            if(vif.arst) continue;      //doubt!
             //AW channel
             if(vif.monitor_cb.awvalid && vif.monitor_cb.awready) begin
                 tr = axi_transaction::type_id::create("tr", this);
@@ -110,6 +111,7 @@ class axi_master_monitor extends uvm_monitor;
         int q_index[$];
         forever begin
             @(posedge vif.aclk)
+            if (vif.arst) continue;
             //AR channel
             if(vif.monitor_cb.arvalid && vif.monitor_cb.arready) begin
                 tr = axi_transaction::type_id::create("tr", this);
