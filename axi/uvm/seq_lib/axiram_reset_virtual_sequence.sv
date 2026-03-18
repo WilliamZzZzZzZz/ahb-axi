@@ -9,6 +9,7 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
     endfunction
 
     virtual task body();
+        super.body();
         write_mid_reset_test();
         read_mid_reset_test();
     endtask
@@ -99,6 +100,7 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
             `uvm_error(get_type_name(), $sformatf("RESET FAIL: arready=%b, exp=0", vif.arready))
         if(vif.rvalid !== 1'b0)
             `uvm_error(get_type_name(), $sformatf("RESET FAIL: rvalid=%b, exp=0", vif.rvalid))
+        `uvm_info(get_type_name(), "Read reset signals checked OK", UVM_MEDIUM)
     endtask
 
     local task do_single_write(bit [15:0] addr, bit [31:0] data);

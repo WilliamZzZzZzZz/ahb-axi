@@ -77,6 +77,9 @@ narrow: run
 unaligned: TESTNAME = axiram_unaligned_test
 unaligned: run
 
+reset: TESTNAME = axiram_reset_test
+reset: run
+
 #############################
 # Coverage targets
 #############################
