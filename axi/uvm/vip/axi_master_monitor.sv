@@ -20,14 +20,12 @@ class axi_master_monitor extends uvm_monitor;
 
     virtual task run_phase(uvm_phase phase);
         super.run_phase(phase);
-        forever begin
-            fork
-                //monitor 5 channels WRITE and READ
-                monitor_write_transaction();        //full beat transaction
-                monitor_read_transaction();         //full beat transaction
-                monitor_reset();                    //partial beat transaction
-            join_none
-        end
+        fork
+            //monitor 5 channels WRITE and READ
+            monitor_write_transaction();        //full beat transaction
+            monitor_read_transaction();         //full beat transaction
+            monitor_reset();                    //partial beat transaction
+        join_none
     endtask
 
     virtual task monitor_write_transaction();
