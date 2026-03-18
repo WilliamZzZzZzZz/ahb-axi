@@ -19,13 +19,17 @@ class axi_read_driver extends uvm_object;
     endfunction
 
     virtual task run_read_channel();
-        // @(vif.arst === 1'b0);
-        @(negedge vif.arst);
-        fork
-            //two read channel threads
-            drive_ar_channel();
-            drive_r_channel();
-        join_none
+        forever begin
+            @(negedge vif.arst);
+            fork
+                //two read channel threads
+                drive_ar_channel();
+                drive_r_channel();
+            join_none
+            @(posedge vif.arst);
+            disable fork;
+            flush_mailboxes();
+        end
     endtask
 
     //read address channel
@@ -86,6 +90,13 @@ class axi_read_driver extends uvm_object;
             rsp_mbx.put(tr);
         end
     endtask
+
+    local function void flush_mailboxes();
+        axi_transaction dummy;
+        while (req_mbx.try_get(dummy));
+        while (ar2r_mbx.try_get(dummy));
+        `uvm_info(get_type_name(), "RESET ENABLE, KILL ALL THREADS", UVM_LOW)
+    endfunction
 
 endclass
 

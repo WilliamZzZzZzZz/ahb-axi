@@ -48,6 +48,7 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
                 wait_cycles(5);
             end
         join_any
+        disable fork;
         `uvm_info(get_type_name(), "--- write_mid_reset_test END ---", UVM_LOW)
 
     endtask
@@ -80,6 +81,7 @@ class axiram_reset_virtual_sequence extends axiram_base_virtual_sequence;
                 wait_cycles(5);
             end
         join_any
+        disable fork;
         `uvm_info(get_type_name(), "--- read_mid_reset_test END ---", UVM_LOW)
     endtask
 

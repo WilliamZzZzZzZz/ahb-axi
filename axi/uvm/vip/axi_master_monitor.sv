@@ -20,11 +20,14 @@ class axi_master_monitor extends uvm_monitor;
 
     virtual task run_phase(uvm_phase phase);
         super.run_phase(phase);
-        fork
-            //monitor 5 channels WRITE and READ
-            monitor_write_transaction();
-            monitor_read_transaction();
-        join_none
+        forever begin
+            fork
+                //monitor 5 channels WRITE and READ
+                monitor_write_transaction();        //full beat transaction
+                monitor_read_transaction();         //full beat transaction
+                monitor_reset();                    //partial beat transaction
+            join_none
+        end
     endtask
 
     virtual task monitor_write_transaction();
@@ -159,6 +162,24 @@ class axi_master_monitor extends uvm_monitor;
                     `uvm_error(get_type_name(), "R channel: queue size < 0")
                 end
             end
+        end
+    endtask
+
+    //reset signal assert, boardcast partial transaction
+    virtual task monitor_reset();
+        forever begin
+            @(posedge vif.arst)     //monitor reset signals
+            foreach (write_trans_queue[i]) begin
+                axi_transaction partial = write_trans_queue[i];
+                if (partial.current_wbeat_count > 0) begin
+                    partial.awlen = partial.current_wbeat_count - 1;
+                    partial.wdata = new[partial.current_wbeat_count](partial.wdata);
+                    partial.wstrb = new[partial.current_wbeat_count](partial.wstrb);
+                    item_observed_port.write(partial);
+                end
+            end
+            write_trans_queue.delete();
+            read_trans_queue.delete();
         end
     endtask
 

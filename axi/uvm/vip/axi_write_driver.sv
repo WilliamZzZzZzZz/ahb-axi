@@ -21,14 +21,18 @@ class axi_write_driver extends uvm_object;
     endfunction
 
     virtual task run_write_channel();
-        // @(vif.arst === 1'b0);
-        @(negedge vif.arst);
-        fork
-            //start three threads
-            drive_aw_channel();
-            drive_w_channel();
-            drive_b_channel();
-        join_none
+        forever begin
+            @(negedge vif.arst);        //wait release arst
+            fork
+                //start three threads
+                drive_aw_channel();
+                drive_w_channel();
+                drive_b_channel();
+            join_none   
+            @(posedge vif.arst);        //assert reset, kill all threads
+            disable fork;
+            flush_mailboxes();          //clear all mailboxes
+        end
     endtask
 
     //write address channel
@@ -128,6 +132,16 @@ class axi_write_driver extends uvm_object;
             rsp_mbx.put(tr);
         end
     endtask
+
+    //clear all mailbox
+    //non-blocking, keep trying get mails from mailbox until it empty
+    local function void flush_mailboxes();
+        axi_transaction dummy;
+        while (req_mbx.try_get(dummy));
+        while (aw2w_mbx.try_get(dummy));
+        while (aw2b_mbx.try_get(dummy));
+        `uvm_info(get_type_name(), "RESET ENABLE, KILL ALL THREADS", UVM_LOW)
+    endfunction
 
 endclass 
 
