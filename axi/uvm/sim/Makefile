@@ -87,7 +87,7 @@ mergecov:
 	urg -format both $(COV_OPTS)
 
 dvecov:
-	dve $(COV_OPTS)
+	dve -cov $(COV_OPTS)
 
 verdicov:
 	verdi -cov -covdir $(CM_DIR)
