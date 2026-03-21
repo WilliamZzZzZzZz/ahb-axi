@@ -80,6 +80,9 @@ unaligned: run
 reset: TESTNAME = axiram_reset_test
 reset: run
 
+pipeline: TESTNAME = axiram_pipeline_test
+pipeline: run
+
 #############################
 # Coverage targets
 #############################
