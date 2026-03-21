@@ -14,6 +14,11 @@ class axi_master_single_sequence extends axi_base_sequence;
     bit [31:0] every_beat_data[];   //store every beat's data
     bit [3:0] every_beat_wstrb[];
 
+    //control sequence whether blocking wait for driver's response
+    //default-mode:  1(blocking)
+    //pipeline-mode: 0(non-blocking)
+    bit wait_for_response = 1;
+
     constraint single_trans_type_cstr {
         trans_type inside {READ, WRITE};
     }
@@ -68,15 +73,21 @@ class axi_master_single_sequence extends axi_base_sequence;
         end
         
         finish_item(req);
-        get_response(rsp);
 
-        //id set 0 in smoke test, so no need to check id temporarily
-        //check response
-        if(rsp.bresp == OKAY) begin
-            `uvm_info(get_type_name(), $sformatf("write complete: ADDR=%0h DATA=%0h", addr, data), UVM_MEDIUM)
-        end else begin
-            `uvm_error(get_type_name(), $sformatf("write error: ADDR=%0h DATA=%0h", addr, data))
+        //blocking
+        if(wait_for_response) begin
+            get_response(rsp);
+
+            //id set 0 in smoke test, so no need to check id temporarily
+            //check response
+            if(rsp.bresp == OKAY) begin
+                `uvm_info(get_type_name(), $sformatf("write complete: ADDR=%0h DATA=%0h", addr, data), UVM_MEDIUM)
+            end else begin
+                `uvm_error(get_type_name(), $sformatf("write error: ADDR=%0h DATA=%0h", addr, data))
+            end
         end
+        //non-blocking, finish_item return and immediately finish
+        //sequence dont wait B channel finish, and send next transaction immediately
     endtask
 
     virtual task do_read();
@@ -100,25 +111,28 @@ class axi_master_single_sequence extends axi_base_sequence;
         end
 
         finish_item(req);
-        get_response(rsp);
 
-        every_beat_data = new[actual_beats];
-        foreach(every_beat_data[i]) begin
-            every_beat_data[i] = rsp.rdata[i];
-        end
+        //blocking
+        if(wait_for_response) begin
+            get_response(rsp);
 
-        data = every_beat_data[0];
+            every_beat_data = new[actual_beats];
+            foreach(every_beat_data[i]) begin
+                every_beat_data[i] = rsp.rdata[i];
+            end
 
-        //id set 0 in smoke test, so no need to check id temporarily
-        //check response
-        if(rsp.rresp[0] == OKAY) begin
-            data =rsp.rdata[0];
-            `uvm_info(get_type_name(), $sformatf("read complete: ADDR=%0h DATA=%0h", addr, data), UVM_MEDIUM)
-        end else begin
-            `uvm_error(get_type_name(), $sformatf("read error: ADDR=%0h DATA=%0h", addr, data))
+            data = every_beat_data[0];
+
+            //id set 0 in smoke test, so no need to check id temporarily
+            //check response
+            if(rsp.rresp[0] == OKAY) begin
+                data =rsp.rdata[0];
+                `uvm_info(get_type_name(), $sformatf("read complete: ADDR=%0h DATA=%0h", addr, data), UVM_MEDIUM)
+            end else begin
+                `uvm_error(get_type_name(), $sformatf("read error: ADDR=%0h DATA=%0h", addr, data))
+            end
         end
     endtask
-
 endclass
 
 `endif 

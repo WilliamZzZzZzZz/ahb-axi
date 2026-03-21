@@ -13,6 +13,8 @@ class axiram_single_read_sequence extends axiram_base_sequence;
 
     bit [31:0] every_beat_data[];   //store every beat's data
 
+    bit wait_for_response = 1;
+
     function new(string name = "axiram_single_read_sequence");
         super.new(name);
     endfunction
@@ -27,6 +29,7 @@ class axiram_single_read_sequence extends axiram_base_sequence;
     axi_single.burst_len   = burst_len;
     axi_single.burst_type  = burst_type;
     axi_single.burst_size  = burst_size;
+    axi_single.wait_for_response = wait_for_response;
 
     axi_single.start(p_sequencer.axi_mst_sqr);
 
