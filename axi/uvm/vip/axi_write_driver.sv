@@ -41,7 +41,8 @@ class axi_write_driver extends uvm_object;
         forever begin
             req_mbx.get(tr);    //get response from master driver
             aw2w_mbx.put(tr);   //copy tr to W and B channel
-            aw2b_mbx.put(tr);
+            // aw2b_mbx.put(tr);
+
             //drive AW signals
             @(vif.master_cb);
             vif.master_cb.awvalid   <= 1'b1;
@@ -61,6 +62,9 @@ class axi_write_driver extends uvm_object;
 
             //jump out DO loop means handshake success
             vif.master_cb.awvalid <= 1'b0;
+
+            //after handshake finish, then give mail to B channel
+            aw2b_mbx.put(tr);
         end
     endtask
 
@@ -105,13 +109,10 @@ class axi_write_driver extends uvm_object;
         forever begin
             aw2b_mbx.get(tr);
 
-            //ready get response from DUT
-            vif.master_cb.bready <= 1'b1;
-
-            //handshake polling
+            //wait for bvalid:0->1, while keep bready = 0
             do begin
                 @(vif.master_cb);
-            end while(vif.master_cb.bvalid === 1'b0);
+            end whlie(vif.master_cb.bvalid === 1'b0);
 
             //check id
             if(vif.master_cb.bid != tr.awid) begin
@@ -125,8 +126,13 @@ class axi_write_driver extends uvm_object;
             tr.bid   = vif.master_cb.bid;
             tr.bresp = vif.master_cb.bresp;
 
-            //get response finish
-            vif.master_cb.bready <= 1'b0;
+            //after bvalid hold 1 cycle, then handshake
+            @(vif.master_cb);
+            vif.master_cb.bready <= 1'b1;
+
+            //wait for the hanshake take effect
+            @(vif.master_cb);
+            vif.master_cb.bready <= 1'b0; 
 
             //send response back
             rsp_mbx.put(tr);

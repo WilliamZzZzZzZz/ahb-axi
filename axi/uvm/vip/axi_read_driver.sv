@@ -71,22 +71,29 @@ class axi_read_driver extends uvm_object;
             tr.rdata = new[beat_num];
             tr.rresp = new[beat_num];
 
-            @(vif.master_cb);
-            vif.master_cb.rready <= 1'b1;
+            // @(vif.master_cb);
+            // vif.master_cb.rready <= 1'b1;
             i = 0;
 
             forever begin
+                do begin
+                    @(vif.master_cb);
+                end while(vif.master_cb.rvalid === 1'b0);
+
+                tr.rdata[i] = vif.master_cb.rdata;
+                tr.rresp[i] = vif.master_cb.rresp;
+
                 @(vif.master_cb);
-                if(vif.master_cb.rvalid === 1'b1) begin
-                    tr.rdata[i] = vif.master_cb.rdata;
-                    tr.rresp[i] = vif.master_cb.rresp;
-                    i++;
-                    if(vif.master_cb.rlast === 1'b1 || i >= beat_num) begin
-                        break;
-                    end
+                vif.master_cb.rready <= 1'b1;
+
+                @(vif.master_cb);
+                vif.master_cb.rready <= 1'b0;
+
+                i++;
+                if(vif.master_cb.rlast === 1'b1 || i >= beat_num) begin
+                    break;
                 end
             end
-            vif.master_cb.rready <= 1'b0;
             rsp_mbx.put(tr);
         end
     endtask
