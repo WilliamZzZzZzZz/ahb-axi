@@ -33,8 +33,10 @@ class axiram_single_read_sequence extends axiram_base_sequence;
 
     axi_single.start(p_sequencer.axi_mst_sqr);
 
-    every_beat_data = axi_single.every_beat_data;
-    data            = axi_single.data;
+    if(wait_for_response) begin
+        every_beat_data = axi_single.every_beat_data;
+        data            = axi_single.data;
+    end
 
     `uvm_info(get_type_name(), "exiting...", UVM_LOW)
     endtask

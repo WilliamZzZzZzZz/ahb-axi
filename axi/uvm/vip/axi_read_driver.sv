@@ -71,26 +71,28 @@ class axi_read_driver extends uvm_object;
             tr.rdata = new[beat_num];
             tr.rresp = new[beat_num];
 
-            // @(vif.master_cb);
-            // vif.master_cb.rready <= 1'b1;
             i = 0;
 
             forever begin
+                bit rlast_snapshot;
                 do begin
                     @(vif.master_cb);
                 end while(vif.master_cb.rvalid === 1'b0);
 
                 tr.rdata[i] = vif.master_cb.rdata;
                 tr.rresp[i] = vif.master_cb.rresp;
+                rlast_snapshot = vif.master_cb.rlast;   //before handshake, task a snapshot of rlast, record rlast status
 
+                //handshake success
                 @(vif.master_cb);
                 vif.master_cb.rready <= 1'b1;
 
+                //after handshake, slave all signals would turn 0, so snapshot of rlast before handshake is important
                 @(vif.master_cb);
                 vif.master_cb.rready <= 1'b0;
 
                 i++;
-                if(vif.master_cb.rlast === 1'b1 || i >= beat_num) begin
+                if(rlast_snapshot || i >= beat_num) begin
                     break;
                 end
             end

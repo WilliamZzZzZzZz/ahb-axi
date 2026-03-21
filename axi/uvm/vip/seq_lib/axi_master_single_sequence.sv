@@ -29,6 +29,10 @@ class axi_master_single_sequence extends axi_base_sequence;
     
     virtual task body();
         `uvm_info(get_type_name(), "started sequence", UVM_LOW)
+        //under pipeline-mode
+        if(!wait_for_response) begin
+            set_response_queue_error_report_disabled(1);
+        end
         if(trans_type == WRITE) begin
             do_write();
         end else begin

@@ -112,7 +112,7 @@ class axi_write_driver extends uvm_object;
             //wait for bvalid:0->1, while keep bready = 0
             do begin
                 @(vif.master_cb);
-            end whlie(vif.master_cb.bvalid === 1'b0);
+            end while(vif.master_cb.bvalid === 1'b0);
 
             //check id
             if(vif.master_cb.bid != tr.awid) begin
