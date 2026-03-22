@@ -34,6 +34,7 @@ class axiram_pipeline_virtual_sequence extends axiram_base_virtual_sequence;
             single_write = axiram_single_write_sequence::type_id::create("single_write");
             single_write.addr       = 16'h3000 + i * (actual_beats * 4);
             single_write.burst_len  = burst_len;
+            single_write.burst_size = BURST_SIZE_4BYTES;
             single_write.burst_type = burst_type;
 
             foreach(every_beat_data[x]) every_beat_data[x] = (i << 8) | x;
@@ -54,6 +55,7 @@ class axiram_pipeline_virtual_sequence extends axiram_base_virtual_sequence;
             single_read = axiram_single_read_sequence::type_id::create("single_read");
             single_read.addr                = 16'h3000 + i * (actual_beats * 4);
             single_read.burst_len           = burst_len;
+            single_read.burst_size          = BURST_SIZE_4BYTES;
             single_read.burst_type          = burst_type;
             single_read.wait_for_response   = 0;
             single_read.start(p_sequencer);

@@ -9,7 +9,7 @@ class axi_master_single_sequence extends axi_base_sequence;
     rand trans_type_enum trans_type;
     rand burst_len_enum burst_len;
     rand burst_type_enum burst_type;
-    rand burst_size_enum burst_size;
+    rand burst_size_enum burst_size = BURST_SIZE_4BYTES;
 
     bit [31:0] every_beat_data[];   //store every beat's data
     bit [3:0] every_beat_wstrb[];
