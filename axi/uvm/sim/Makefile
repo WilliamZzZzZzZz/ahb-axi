@@ -84,6 +84,25 @@ pipeline: TESTNAME = axiram_pipeline_test
 pipeline: run
 
 #############################
+# Regression + Coverage
+# Usage: make comp COV=1 → make elab COV=1 → make regress_cov → make dvecov
+#############################
+TESTS = smoke fixed narrow unaligned reset pipeline
+
+regress:
+	@for t in $(TESTS); do \
+		echo "===== Running $$t ====="; \
+		$(MAKE) $$t COV=$(COV) || exit 1; \
+	done
+
+regress_cov:
+	@for t in $(TESTS); do \
+		echo "===== Running $$t with coverage ====="; \
+		$(MAKE) $$t COV=1 || exit 1; \
+	done
+	$(MAKE) mergecov
+
+#############################
 # Coverage targets
 #############################
 mergecov:
