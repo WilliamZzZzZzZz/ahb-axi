@@ -14,6 +14,9 @@ class axi_transaction extends uvm_sequence_item;
     int wbeat_finish;
     int b_finish;
     int rbeat_finish;
+
+    //pipeline-mode, driver checks this flag before sending response back
+    bit response_requested = 1;
     
     //--------------------------------------------------------------------------
     // Write address channel

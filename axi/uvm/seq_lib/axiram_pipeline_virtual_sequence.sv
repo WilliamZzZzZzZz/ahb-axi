@@ -72,12 +72,14 @@ class axiram_pipeline_virtual_sequence extends axiram_base_virtual_sequence;
         single_write.data               = every_beat_data[0];
         single_write.every_beat_data    = every_beat_data;
         single_write.burst_len          = BURST_LEN_4BEATS;
+        single_write.burst_size         = BURST_SIZE_4BYTES;
         single_write.burst_type         = INCR;
         single_write.start(p_sequencer);
         //read blocking-mode(default)
         single_read = axiram_single_read_sequence::type_id::create("single_read");
         single_read.addr                = 16'h5000;
         single_read.burst_len           = BURST_LEN_4BEATS;
+        single_read.burst_size          = BURST_SIZE_4BYTES;
         single_read.burst_type          = INCR;
         single_read.start(p_sequencer);
 

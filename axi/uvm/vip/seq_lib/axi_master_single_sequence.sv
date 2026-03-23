@@ -76,6 +76,7 @@ class axi_master_single_sequence extends axi_base_sequence;
             req.wstrb[i] = (every_beat_wstrb.size() > i) ? every_beat_wstrb[i] : 4'hF;
         end
         
+        req.response_requested = wait_for_response;
         finish_item(req);
 
         //blocking
@@ -113,7 +114,8 @@ class axi_master_single_sequence extends axi_base_sequence;
         }) begin
             `uvm_fatal(get_type_name(), "randomize failed in vip-write-transaction")
         end
-
+        
+        req.response_requested = wait_for_response;
         finish_item(req);
 
         //blocking

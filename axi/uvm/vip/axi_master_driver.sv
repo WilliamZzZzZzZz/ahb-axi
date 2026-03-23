@@ -51,13 +51,15 @@ class axi_master_driver extends uvm_driver#(axi_transaction);
             forever begin
                 axi_transaction wr_rsp;
                 write_drv.rsp_mbx.get(wr_rsp);
-                seq_item_port.put_response(wr_rsp);
+                if(wr_rsp.response_requested)
+                    seq_item_port.put_response(wr_rsp);
             end
             //thread 5: collect read rsp and send back to sequencer
             forever begin
                 axi_transaction rd_rsp;
                 read_drv.rsp_mbx.get(rd_rsp);
-                seq_item_port.put_response(rd_rsp);
+                if(rd_rsp.response_requested)
+                    seq_item_port.put_response(rd_rsp);
             end
         join_none
 

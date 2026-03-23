@@ -61,9 +61,11 @@ class axi_master_monitor extends uvm_monitor;
             end
             //W channel
             if(vif.monitor_cb.wvalid && vif.monitor_cb.wready) begin
-                //this loop deal focus on single transaction
-                if(write_trans_queue.size() > 0) begin
-                    temp_tr = write_trans_queue[0];
+                int w_idx[$];
+                w_idx = write_trans_queue.find_first_index() with (!item.wbeat_finish);
+                //focus on single transaction
+                if(w_idx.size() > 0) begin
+                    temp_tr = write_trans_queue[w_idx[0]];
                     //this loop focus on single beat
                     if(temp_tr.current_wbeat_count <= temp_tr.awlen) begin
                         temp_tr.wdata[temp_tr.current_wbeat_count] = vif.monitor_cb.wdata;
