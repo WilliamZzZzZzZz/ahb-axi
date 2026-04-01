@@ -85,6 +85,7 @@ class axi_write_driver extends uvm_object;
             vif.master_cb.wlast  <= (beat_num == 1) ? 1'b1 : 1'b0;
             i = 1;
 
+            //every forever loop only driven one beat
             forever begin
                 @(vif.master_cb);
                 if(vif.master_cb.wready === 1'b1) begin

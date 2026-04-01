@@ -73,6 +73,7 @@ class axi_read_driver extends uvm_object;
 
             i = 0;
 
+            //every forever loop only driven one beat
             forever begin
                 bit rlast_snapshot;
                 do begin
